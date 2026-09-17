@@ -22,6 +22,7 @@ and one seller.
 | `docs/` | Architecture, data model and decision records |
 | `docs/decisions/` | ADRs — the reasoning behind irreversible choices |
 | `prototype/` | Clickable Just Paints storefront prototype (static, no build step) |
+| `backend/` | Commerce core: .NET 10, Clean Architecture, PostgreSQL |
 
 ## Running the prototype
 
@@ -38,5 +39,6 @@ in this repo.
 
 ## Status
 
-Pre-Phase 0. The platform stack decision is open — see
-`docs/decisions/0001-commerce-platform.md`.
+Phase 0. The platform decision is taken: custom .NET 10 commerce core
+(`docs/decisions/0001-commerce-platform.md`). Domain, pricing, coverage,
+persistence and read endpoints are built; cart, checkout and payments are not.

@@ -1,8 +1,8 @@
 # Architecture
 
-Status: **proposed**. The commerce platform choice is open — see
-`decisions/0001-commerce-platform.md`. This document assumes the recommended
-option (custom .NET 10 core) and flags where a Medusa decision would change it.
+Status: **accepted**. The commerce platform decision was taken on 2026-09-17 —
+custom .NET 10 core, see `decisions/0001-commerce-platform.md`. The backend lives
+in `backend/`.
 
 ## Shape
 
@@ -99,14 +99,18 @@ that ground to Leroy Merlin and Takealot.
 sandboxes and a courier test account. No production data in lower environments,
 POPIA makes that a compliance issue rather than a preference.
 
-## If the platform decision goes to Medusa
+## What is built
 
-The storefront, the data model and the bounded contexts all survive. What
-changes:
+| Piece | Where | State |
+| --- | --- | --- |
+| Catalogue, Colour, Sellers, Pricing, Coverage, Ordering entities | `backend/src/Domain` | Done |
+| Price resolver | `Domain/Pricing/PriceResolver.cs` | Done, 39 domain tests |
+| Coverage calculator | `Domain/Coverage/CoverageCalculator.cs` | Done |
+| Returnability policy | `Domain/Ordering/ReturnabilityPolicy.cs` | Done |
+| Product pricing service | `Application/Paints` | Done, 10 tests |
+| EF Core model, migration | `Infrastructure/Persistence` | Initial migration generated |
+| Colour browse, pricing, coverage endpoints | `Api/Endpoints` | Done |
+| Stevensons seed | `Api/Seeding` | 180 colours, one product |
 
-- `Domain` and `Application` become Medusa modules in TypeScript
-- The price resolver becomes a custom pricing module rather than domain code
-- `Offer` maps onto a multi-vendor module rather than a first-class entity
-- Phase 3 marketplace work gets harder; Phase 1 arrives roughly two months sooner
-
-The data model document remains correct either way. That is deliberate.
+Not yet built: cart and checkout persistence, payments, shipping rates, search,
+admin, seller portal.

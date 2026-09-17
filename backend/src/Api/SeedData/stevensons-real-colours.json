@@ -1,0 +1,1442 @@
+[
+ {
+  "code": "RC1",
+  "name": "Shoe Shine",
+  "hex": "#432e16",
+  "lrv": 3.2,
+  "family": "Orange",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC2",
+  "name": "Olive Oil",
+  "hex": "#5e553d",
+  "lrv": 9.2,
+  "family": "Orange",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC3",
+  "name": "Heligoland",
+  "hex": "#565956",
+  "lrv": 9.8,
+  "family": "Neutral",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC4",
+  "name": "Guinness",
+  "hex": "#24272a",
+  "lrv": 2.0,
+  "family": "Neutral",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC5",
+  "name": "Hardcore",
+  "hex": "#44525a",
+  "lrv": 8.0,
+  "family": "Blue",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC6",
+  "name": "Akela",
+  "hex": "#4d514e",
+  "lrv": 8.0,
+  "family": "Neutral",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC7",
+  "name": "Lighthouse",
+  "hex": "#565f66",
+  "lrv": 11.1,
+  "family": "Neutral",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC8",
+  "name": "Dill",
+  "hex": "#526753",
+  "lrv": 12.1,
+  "family": "Green",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC9",
+  "name": "Gulf Stream",
+  "hex": "#103a1f",
+  "lrv": 3.2,
+  "family": "Green",
+  "tintBase": "Accent"
+ },
+ {
+  "code": "RC10",
+  "name": "May Day",
+  "hex": "#5d4226",
+  "lrv": 6.4,
+  "family": "Orange",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC11",
+  "name": "Fawn",
+  "hex": "#756c47",
+  "lrv": 15.0,
+  "family": "Yellow",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC12",
+  "name": "African Elephant",
+  "hex": "#868e88",
+  "lrv": 26.2,
+  "family": "Neutral",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC13",
+  "name": "Mr White",
+  "hex": "#636569",
+  "lrv": 13.0,
+  "family": "Neutral",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC14",
+  "name": "Equinox",
+  "hex": "#5c676f",
+  "lrv": 13.1,
+  "family": "Neutral",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC15",
+  "name": "Breaking Surf",
+  "hex": "#496766",
+  "lrv": 12.1,
+  "family": "Teal",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC16",
+  "name": "Brimstone",
+  "hex": "#88a9b2",
+  "lrv": 36.8,
+  "family": "Teal",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC17",
+  "name": "Granite",
+  "hex": "#93af8e",
+  "lrv": 38.8,
+  "family": "Green",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC18",
+  "name": "Budding Bough",
+  "hex": "#135f3b",
+  "lrv": 8.6,
+  "family": "Green",
+  "tintBase": "Accent"
+ },
+ {
+  "code": "RC19",
+  "name": "Toffee",
+  "hex": "#6a5037",
+  "lrv": 9.1,
+  "family": "Orange",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC20",
+  "name": "Fresh Clay",
+  "hex": "#938466",
+  "lrv": 23.7,
+  "family": "Orange",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC21",
+  "name": "Colonel Hathi",
+  "hex": "#979e98",
+  "lrv": 33.3,
+  "family": "Neutral",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC22",
+  "name": "Locomotive",
+  "hex": "#898a8d",
+  "lrv": 25.4,
+  "family": "Neutral",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC23",
+  "name": "Pompeii",
+  "hex": "#9eafb4",
+  "lrv": 41.2,
+  "family": "Teal",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC24",
+  "name": "Iron Bridge",
+  "hex": "#7a8480",
+  "lrv": 22.2,
+  "family": "Neutral",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC25",
+  "name": "Pewter",
+  "hex": "#a8c4c8",
+  "lrv": 52.0,
+  "family": "Teal",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC26",
+  "name": "Mountain Vista",
+  "hex": "#b2d1c0",
+  "lrv": 58.9,
+  "family": "Green",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC27",
+  "name": "Crocodile",
+  "hex": "#9ebaa2",
+  "lrv": 45.0,
+  "family": "Green",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC28",
+  "name": "Burnt Umber",
+  "hex": "#978065",
+  "lrv": 23.0,
+  "family": "Orange",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC29",
+  "name": "Desert Storm",
+  "hex": "#aca495",
+  "lrv": 37.5,
+  "family": "Orange",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC30",
+  "name": "Shale",
+  "hex": "#b7bdb8",
+  "lrv": 49.9,
+  "family": "Neutral",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC31",
+  "name": "Fall Out",
+  "hex": "#98989a",
+  "lrv": 31.5,
+  "family": "Neutral",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC32",
+  "name": "Room 101",
+  "hex": "#c8d2d8",
+  "lrv": 63.3,
+  "family": "Blue",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC33",
+  "name": "Pigeon",
+  "hex": "#bad4d7",
+  "lrv": 62.4,
+  "family": "Teal",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC34",
+  "name": "Charcoal Smoke",
+  "hex": "#d9eff8",
+  "lrv": 83.3,
+  "family": "Teal",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC35",
+  "name": "Far Horizon",
+  "hex": "#ecf7f5",
+  "lrv": 90.9,
+  "family": "Teal",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC36",
+  "name": "Shaft of Light",
+  "hex": "#d2eadc",
+  "lrv": 77.7,
+  "family": "Green",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC37",
+  "name": "Quick Sand",
+  "hex": "#c3b4a3",
+  "lrv": 46.9,
+  "family": "Orange",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC38",
+  "name": "Starlight",
+  "hex": "#fcf6e5",
+  "lrv": 92.3,
+  "family": "Orange",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC39",
+  "name": "Quarry",
+  "hex": "#d1d3cf",
+  "lrv": 64.6,
+  "family": "Neutral",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC40",
+  "name": "Cloudy Day",
+  "hex": "#a7a8a9",
+  "lrv": 39.1,
+  "family": "Neutral",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC41",
+  "name": "Arctic Fox",
+  "hex": "#f0f7f7",
+  "lrv": 91.8,
+  "family": "Neutral",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC42",
+  "name": "Silver Fish",
+  "hex": "#b9d3d8",
+  "lrv": 61.9,
+  "family": "Teal",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC43",
+  "name": "Ever Changing Mood",
+  "hex": "#edf7fa",
+  "lrv": 91.4,
+  "family": "Teal",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC44",
+  "name": "Sour",
+  "hex": "#e5f3dc",
+  "lrv": 85.9,
+  "family": "Green",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC45",
+  "name": "Conservation",
+  "hex": "#f2f8f2",
+  "lrv": 92.4,
+  "family": "Neutral",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC46",
+  "name": "Eggplant",
+  "hex": "#4d423f",
+  "lrv": 5.8,
+  "family": "Neutral",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC47",
+  "name": "Smoked Silver",
+  "hex": "#8c8985",
+  "lrv": 25.2,
+  "family": "Neutral",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC48",
+  "name": "Invisible Sun",
+  "hex": "#9ea6b4",
+  "lrv": 37.8,
+  "family": "Blue",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC49",
+  "name": "Bilbo",
+  "hex": "#53575a",
+  "lrv": 9.4,
+  "family": "Neutral",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC50",
+  "name": "Mineshaft",
+  "hex": "#55626b",
+  "lrv": 11.7,
+  "family": "Blue",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC51",
+  "name": "Weathervane",
+  "hex": "#556e70",
+  "lrv": 14.3,
+  "family": "Teal",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC52",
+  "name": "Twisted Sister",
+  "hex": "#4a584b",
+  "lrv": 8.9,
+  "family": "Neutral",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC53",
+  "name": "Leprechaun",
+  "hex": "#455c44",
+  "lrv": 9.3,
+  "family": "Green",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC54",
+  "name": "Raindance",
+  "hex": "#316051",
+  "lrv": 9.6,
+  "family": "Green",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC55",
+  "name": "Christian",
+  "hex": "#746769",
+  "lrv": 14.4,
+  "family": "Neutral",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC56",
+  "name": "Silhouette",
+  "hex": "#9ea1a2",
+  "lrv": 35.4,
+  "family": "Neutral",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC57",
+  "name": "Smoking Gun",
+  "hex": "#c1c5c8",
+  "lrv": 55.4,
+  "family": "Neutral",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC58",
+  "name": "Flipper",
+  "hex": "#6f7271",
+  "lrv": 16.6,
+  "family": "Neutral",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC59",
+  "name": "Stonecutter",
+  "hex": "#7a8d9b",
+  "lrv": 25.6,
+  "family": "Blue",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC60",
+  "name": "Atlantis",
+  "hex": "#808e91",
+  "lrv": 26.0,
+  "family": "Neutral",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC61",
+  "name": "Middle Aged",
+  "hex": "#6a746c",
+  "lrv": 16.6,
+  "family": "Neutral",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC62",
+  "name": "19th Green",
+  "hex": "#789464",
+  "lrv": 26.1,
+  "family": "Green",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC63",
+  "name": "Cloudburst",
+  "hex": "#718d82",
+  "lrv": 24.2,
+  "family": "Green",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC64",
+  "name": "Kastel",
+  "hex": "#c8cad6",
+  "lrv": 59.4,
+  "family": "Blue",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC65",
+  "name": "Jaws",
+  "hex": "#b0b3b2",
+  "lrv": 44.7,
+  "family": "Neutral",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC66",
+  "name": "Greyish",
+  "hex": "#d6d1ca",
+  "lrv": 64.2,
+  "family": "Orange",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC67",
+  "name": "Slough",
+  "hex": "#888b8d",
+  "lrv": 25.6,
+  "family": "Neutral",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC68",
+  "name": "French Grey",
+  "hex": "#93a6b5",
+  "lrv": 36.8,
+  "family": "Blue",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC69",
+  "name": "Vagabond",
+  "hex": "#88aab2",
+  "lrv": 37.2,
+  "family": "Teal",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC70",
+  "name": "Hurricane",
+  "hex": "#71806f",
+  "lrv": 20.1,
+  "family": "Neutral",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC71",
+  "name": "Hungarian Style",
+  "hex": "#8db06b",
+  "lrv": 37.8,
+  "family": "Green",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC72",
+  "name": "Lagoon",
+  "hex": "#8fc1b1",
+  "lrv": 47.2,
+  "family": "Green",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC73",
+  "name": "Orchard Grey",
+  "hex": "#d1cace",
+  "lrv": 60.3,
+  "family": "Neutral",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC74",
+  "name": "Irish Slate",
+  "hex": "#cfd2d3",
+  "lrv": 64.1,
+  "family": "Neutral",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC75",
+  "name": "Misty Dawn",
+  "hex": "#e7e4e0",
+  "lrv": 77.9,
+  "family": "Orange",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC76",
+  "name": "Dull Grey",
+  "hex": "#9ea1a2",
+  "lrv": 35.4,
+  "family": "Neutral",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC77",
+  "name": "Cumulus",
+  "hex": "#babcca",
+  "lrv": 50.7,
+  "family": "Blue",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC78",
+  "name": "Raven's Song",
+  "hex": "#8cadad",
+  "lrv": 38.5,
+  "family": "Teal",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC79",
+  "name": "Scotts Mist",
+  "hex": "#bcc9c5",
+  "lrv": 56.5,
+  "family": "Green",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC80",
+  "name": "Pitch and Put",
+  "hex": "#b2d6b4",
+  "lrv": 60.9,
+  "family": "Green",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC81",
+  "name": "Terrace Pint",
+  "hex": "#c6e7e0",
+  "lrv": 74.5,
+  "family": "Teal",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC82",
+  "name": "Pilgrim",
+  "hex": "#ded7da",
+  "lrv": 69.2,
+  "family": "Neutral",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC83",
+  "name": "Candle Wax",
+  "hex": "#ebebeb",
+  "lrv": 83.1,
+  "family": "Neutral",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC84",
+  "name": "Glass",
+  "hex": "#9ea6b3",
+  "lrv": 37.8,
+  "family": "Blue",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC85",
+  "name": "Glacier",
+  "hex": "#c8c8c8",
+  "lrv": 57.8,
+  "family": "Neutral",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC86",
+  "name": "Ethereal",
+  "hex": "#e7e9f7",
+  "lrv": 82.0,
+  "family": "Blue",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC87",
+  "name": "Potomac",
+  "hex": "#d8eced",
+  "lrv": 80.7,
+  "family": "Teal",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC88",
+  "name": "Smoke",
+  "hex": "#bec8c4",
+  "lrv": 56.2,
+  "family": "Neutral",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC89",
+  "name": "Leapfrog",
+  "hex": "#c6e0c4",
+  "lrv": 69.3,
+  "family": "Green",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC90",
+  "name": "Jade Light",
+  "hex": "#e9fff8",
+  "lrv": 95.6,
+  "family": "Green",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC91",
+  "name": "Das Boot",
+  "hex": "#445e65",
+  "lrv": 10.2,
+  "family": "Teal",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC92",
+  "name": "Everlasting",
+  "hex": "#27416f",
+  "lrv": 5.4,
+  "family": "Blue",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC93",
+  "name": "Stream Line",
+  "hex": "#366088",
+  "lrv": 10.9,
+  "family": "Blue",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC94",
+  "name": "Crushed Grape",
+  "hex": "#644871",
+  "lrv": 8.5,
+  "family": "Purple",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC95",
+  "name": "Brandt's Batch",
+  "hex": "#d93e30",
+  "lrv": 18.4,
+  "family": "Red",
+  "tintBase": "Accent"
+ },
+ {
+  "code": "RC96",
+  "name": "French Kiss",
+  "hex": "#ef4840",
+  "lrv": 23.4,
+  "family": "Red",
+  "tintBase": "Accent"
+ },
+ {
+  "code": "RC97",
+  "name": "Everlasting",
+  "hex": "#ae8d2f",
+  "lrv": 28.3,
+  "family": "Orange",
+  "tintBase": "Accent"
+ },
+ {
+  "code": "RC98",
+  "name": "Tahoma",
+  "hex": "#927c43",
+  "lrv": 20.9,
+  "family": "Orange",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC99",
+  "name": "Sepia",
+  "hex": "#a18f66",
+  "lrv": 28.2,
+  "family": "Orange",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC100",
+  "name": "Surprising Blue",
+  "hex": "#607d89",
+  "lrv": 19.0,
+  "family": "Teal",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC101",
+  "name": "The Delta",
+  "hex": "#3a5f93",
+  "lrv": 11.2,
+  "family": "Blue",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC102",
+  "name": "Swan Lake",
+  "hex": "#47759e",
+  "lrv": 16.5,
+  "family": "Blue",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC103",
+  "name": "Lilac",
+  "hex": "#836588",
+  "lrv": 15.9,
+  "family": "Pink",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC104",
+  "name": "Rebel",
+  "hex": "#c74747",
+  "lrv": 17.1,
+  "family": "Red",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC105",
+  "name": "Triffid",
+  "hex": "#ef4634",
+  "lrv": 23.0,
+  "family": "Red",
+  "tintBase": "Accent"
+ },
+ {
+  "code": "RC106",
+  "name": "Leffe Blond",
+  "hex": "#fdbb2b",
+  "lrv": 56.6,
+  "family": "Orange",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC107",
+  "name": "Good Job",
+  "hex": "#a99a60",
+  "lrv": 32.4,
+  "family": "Yellow",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC108",
+  "name": "Oak Parquet",
+  "hex": "#bbaf84",
+  "lrv": 42.9,
+  "family": "Yellow",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC109",
+  "name": "Blue Danube",
+  "hex": "#8eb7c9",
+  "lrv": 43.8,
+  "family": "Teal",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC110",
+  "name": "Cabaret",
+  "hex": "#4e70a9",
+  "lrv": 16.1,
+  "family": "Blue",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC111",
+  "name": "Huntsman",
+  "hex": "#668fbc",
+  "lrv": 26.1,
+  "family": "Blue",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC112",
+  "name": "Plum Bowled",
+  "hex": "#8b6d94",
+  "lrv": 18.6,
+  "family": "Purple",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC113",
+  "name": "Ruby",
+  "hex": "#ef4b4f",
+  "lrv": 23.9,
+  "family": "Red",
+  "tintBase": "Accent"
+ },
+ {
+  "code": "RC114",
+  "name": "Amere",
+  "hex": "#f2695b",
+  "lrv": 29.7,
+  "family": "Red",
+  "tintBase": "Accent"
+ },
+ {
+  "code": "RC115",
+  "name": "Sunflower",
+  "hex": "#fcca5c",
+  "lrv": 63.7,
+  "family": "Orange",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC116",
+  "name": "Moonlight Shadow",
+  "hex": "#d1bf7a",
+  "lrv": 52.2,
+  "family": "Yellow",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC117",
+  "name": "Simply Sarah",
+  "hex": "#d3caa6",
+  "lrv": 58.8,
+  "family": "Yellow",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC118",
+  "name": "Atmospheric",
+  "hex": "#acdaf0",
+  "lrv": 65.2,
+  "family": "Teal",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC119",
+  "name": "Ski Jump",
+  "hex": "#90c0e7",
+  "lrv": 49.4,
+  "family": "Blue",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC120",
+  "name": "Pixie",
+  "hex": "#81b5e1",
+  "lrv": 43.2,
+  "family": "Blue",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC121",
+  "name": "Lavender Glow",
+  "hex": "#caa7ce",
+  "lrv": 44.7,
+  "family": "Pink",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC122",
+  "name": "Coral",
+  "hex": "#d9525c",
+  "lrv": 21.6,
+  "family": "Red",
+  "tintBase": "Accent"
+ },
+ {
+  "code": "RC123",
+  "name": "Turkish Delight",
+  "hex": "#f48069",
+  "lrv": 35.7,
+  "family": "Red",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC124",
+  "name": "Amsterdam Blonde",
+  "hex": "#ffd579",
+  "lrv": 70.2,
+  "family": "Orange",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC125",
+  "name": "Wisconsin",
+  "hex": "#fcf5b7",
+  "lrv": 89.4,
+  "family": "Yellow",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC126",
+  "name": "Caprice",
+  "hex": "#f1ecd8",
+  "lrv": 83.6,
+  "family": "Yellow",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC127",
+  "name": "Turkish Batch",
+  "hex": "#d2edf7",
+  "lrv": 81.0,
+  "family": "Teal",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC128",
+  "name": "Celestial",
+  "hex": "#8ea2ca",
+  "lrv": 35.9,
+  "family": "Blue",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC129",
+  "name": "Periwinkle",
+  "hex": "#97cff0",
+  "lrv": 57.5,
+  "family": "Blue",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC130",
+  "name": "Free Spirit",
+  "hex": "#d6b6d7",
+  "lrv": 52.7,
+  "family": "Pink",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC131",
+  "name": "Amelda",
+  "hex": "#f69da1",
+  "lrv": 46.3,
+  "family": "Red",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC132",
+  "name": "Soho",
+  "hex": "#f9aa8a",
+  "lrv": 50.7,
+  "family": "Orange",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC133",
+  "name": "Auxo",
+  "hex": "#ffeeb4",
+  "lrv": 85.7,
+  "family": "Yellow",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC134",
+  "name": "Duckie",
+  "hex": "#fbf8c0",
+  "lrv": 91.4,
+  "family": "Yellow",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC135",
+  "name": "Parchment",
+  "hex": "#f0f0e6",
+  "lrv": 86.6,
+  "family": "Yellow",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC136",
+  "name": "Downpour",
+  "hex": "#4d6b71",
+  "lrv": 13.3,
+  "family": "Teal",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC137",
+  "name": "Danube",
+  "hex": "#4f6c86",
+  "lrv": 14.1,
+  "family": "Blue",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC138",
+  "name": "Smooth Kevin",
+  "hex": "#58668f",
+  "lrv": 13.6,
+  "family": "Blue",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC139",
+  "name": "Jumpin Jack",
+  "hex": "#9e7994",
+  "lrv": 23.1,
+  "family": "Pink",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC140",
+  "name": "Goodbye Kari",
+  "hex": "#9b3041",
+  "lrv": 9.5,
+  "family": "Red",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC141",
+  "name": "Cowie",
+  "hex": "#ef502f",
+  "lrv": 24.3,
+  "family": "Red",
+  "tintBase": "Accent"
+ },
+ {
+  "code": "RC142",
+  "name": "Yellow Submarine",
+  "hex": "#f9ec50",
+  "lrv": 80.7,
+  "family": "Yellow",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC143",
+  "name": "Chocolate Cake",
+  "hex": "#705730",
+  "lrv": 10.5,
+  "family": "Orange",
+  "tintBase": "Deep"
+ },
+ {
+  "code": "RC144",
+  "name": "Glitter's Team",
+  "hex": "#9f7f48",
+  "lrv": 23.0,
+  "family": "Orange",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC145",
+  "name": "Stop the Clock",
+  "hex": "#5d858e",
+  "lrv": 21.1,
+  "family": "Teal",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC146",
+  "name": "Invincible",
+  "hex": "#7ca3c1",
+  "lrv": 34.3,
+  "family": "Blue",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC147",
+  "name": "John's Joke",
+  "hex": "#6a7ba3",
+  "lrv": 19.9,
+  "family": "Blue",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC148",
+  "name": "Violet Femme",
+  "hex": "#c493a4",
+  "lrv": 35.3,
+  "family": "Pink",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC149",
+  "name": "Bad Obsession",
+  "hex": "#b0424b",
+  "lrv": 13.6,
+  "family": "Red",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC150",
+  "name": "Baywatch",
+  "hex": "#f16043",
+  "lrv": 27.5,
+  "family": "Red",
+  "tintBase": "Accent"
+ },
+ {
+  "code": "RC151",
+  "name": "Tweety",
+  "hex": "#f9f5a2",
+  "lrv": 88.1,
+  "family": "Yellow",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC152",
+  "name": "Desert Track",
+  "hex": "#a7955b",
+  "lrv": 30.5,
+  "family": "Yellow",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC153",
+  "name": "Waffle",
+  "hex": "#b2a888",
+  "lrv": 39.2,
+  "family": "Yellow",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC154",
+  "name": "Swirl of Blue",
+  "hex": "#8bb7c4",
+  "lrv": 43.3,
+  "family": "Teal",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC155",
+  "name": "Concorde",
+  "hex": "#99d0ec",
+  "lrv": 57.9,
+  "family": "Blue",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC156",
+  "name": "Oriental",
+  "hex": "#b5ceec",
+  "lrv": 60.0,
+  "family": "Blue",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC157",
+  "name": "Satruday Night Fever",
+  "hex": "#e4a4bc",
+  "lrv": 46.7,
+  "family": "Pink",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC158",
+  "name": "Debbie Does",
+  "hex": "#c64152",
+  "lrv": 16.4,
+  "family": "Red",
+  "tintBase": "Medium"
+ },
+ {
+  "code": "RC159",
+  "name": "Chinese Sun",
+  "hex": "#f37044",
+  "lrv": 31.1,
+  "family": "Red",
+  "tintBase": "Accent"
+ },
+ {
+  "code": "RC160",
+  "name": "Yellow Peril",
+  "hex": "#f9f6a9",
+  "lrv": 88.9,
+  "family": "Yellow",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC161",
+  "name": "Saturn's Ring",
+  "hex": "#d6c190",
+  "lrv": 54.4,
+  "family": "Orange",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC162",
+  "name": "New Hampshire Tan",
+  "hex": "#d5c5a0",
+  "lrv": 56.6,
+  "family": "Orange",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC163",
+  "name": "Balmy Haze",
+  "hex": "#f5fbfe",
+  "lrv": 95.6,
+  "family": "Blue",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC164",
+  "name": "Curve of the Earth",
+  "hex": "#aadbf1",
+  "lrv": 65.6,
+  "family": "Teal",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC165",
+  "name": "Hyacinth",
+  "hex": "#d3e6f7",
+  "lrv": 77.2,
+  "family": "Blue",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC166",
+  "name": "Panache",
+  "hex": "#f9c3d7",
+  "lrv": 64.1,
+  "family": "Pink",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC167",
+  "name": "Panther",
+  "hex": "#cc9193",
+  "lrv": 35.2,
+  "family": "Red",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC168",
+  "name": "Easy Orange",
+  "hex": "#f58559",
+  "lrv": 36.9,
+  "family": "Orange",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC169",
+  "name": "Lime Stone",
+  "hex": "#f9f5a4",
+  "lrv": 88.1,
+  "family": "Yellow",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC170",
+  "name": "Pennsylvania",
+  "hex": "#fde8b2",
+  "lrv": 81.8,
+  "family": "Orange",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC171",
+  "name": "Blossom",
+  "hex": "#f3dfbb",
+  "lrv": 75.4,
+  "family": "Orange",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC172",
+  "name": "Buoyant",
+  "hex": "#f9ffff",
+  "lrv": 98.9,
+  "family": "Teal",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC173",
+  "name": "Silverpointe",
+  "hex": "#e9ffff",
+  "lrv": 96.1,
+  "family": "Teal",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC174",
+  "name": "Turn of the Tide",
+  "hex": "#c5d8ff",
+  "lrv": 68.2,
+  "family": "Blue",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC175",
+  "name": "Baby Girl",
+  "hex": "#fad3e3",
+  "lrv": 72.5,
+  "family": "Pink",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC176",
+  "name": "Heaven Can Wait",
+  "hex": "#efb2b0",
+  "lrv": 53.3,
+  "family": "Red",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC177",
+  "name": "Felicity",
+  "hex": "#f79e85",
+  "lrv": 45.9,
+  "family": "Red",
+  "tintBase": "Pastel"
+ },
+ {
+  "code": "RC178",
+  "name": "Straw Boater",
+  "hex": "#fefde7",
+  "lrv": 97.1,
+  "family": "Yellow",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC179",
+  "name": "Nepal",
+  "hex": "#fdf4e5",
+  "lrv": 91.2,
+  "family": "Orange",
+  "tintBase": "White"
+ },
+ {
+  "code": "RC180",
+  "name": "Honey Glow",
+  "hex": "#faf4e9",
+  "lrv": 90.9,
+  "family": "Orange",
+  "tintBase": "White"
+ }
+]

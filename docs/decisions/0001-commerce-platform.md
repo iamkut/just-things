@@ -1,6 +1,6 @@
 # ADR-0001: Commerce platform
 
-**Status:** Proposed — awaiting decision
+**Status:** Accepted
 **Date:** 2026-09-17
 
 ## Context
@@ -14,7 +14,8 @@ base derived from the chosen colour (see ADR-0002).
 
 ## Decision
 
-Recommended: **build the commerce core on .NET 10, integrate everything else.**
+**Build the commerce core on .NET 10 and integrate everything else.**
+Accepted 2026-09-17.
 
 Shopify Plus is eliminated. It raised the variant ceiling to 2,048 in October
 2025 but still permits only 3 options per product, and Liquid caps
@@ -22,7 +23,7 @@ Shopify Plus is eliminated. It raised the variant ceiling to 2,048 in October
 Shopify cannot price a line item from a runtime rule without dropping to draft
 orders — which breaks the storefront checkout.
 
-Medusa v2 is the fallback if time-to-first-revenue outranks architectural fit.
+Medusa v2 was the considered alternative and was not taken.
 
 ## Consequences
 
@@ -40,8 +41,17 @@ Medusa v2 is the fallback if time-to-first-revenue outranks architectural fit.
 **Not building:** payments (Peach/Stitch), shipping (Bob Go), search
 (Meilisearch), media, transactional email. These are integrations.
 
+## Database
+
+PostgreSQL, via Npgsql and EF Core 10, with snake_case naming to match the xcii
+convention. Chosen over SQL Server on hosting cost for a consumer marketplace.
+
+The provider is confined to `Infrastructure/DependencyInjection.cs` and the
+design-time factory. Switching to SQL Server is those two call sites, a package
+swap and a regenerated migration.
+
 ## Revisit if
 
 Runway tightens such that two months matters more than five years of
-maintainability. In that case take Medusa v2, keep ADR-0002, and accept harder
-Phase 3 work.
+maintainability. Reversing this after Phase 1 takes money means rebuilding a
+working checkout, so the window for changing course is now, not later.

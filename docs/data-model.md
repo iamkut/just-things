@@ -147,7 +147,12 @@ Computed **once, at order placement**, and stored on the line:
 | --- | --- | --- |
 | `Returnable` | Factory white, sundries, tools | ECTA 7-day cooling-off applies |
 | `NonReturnableCustomMixed` | Any tinted line | ECTA excludes goods made to consumer specification |
-| `ReturnableDefectOnly` | Tinted but off-specification | Still returnable if it does not match what was ordered |
+
+Defect rights are deliberately **not** a third enum value. Goods that do not
+conform to the specification ordered come back however they were made, so that is
+an invariant of the policy rather than a state a line can be in —
+`ReturnabilityPolicy.AllowsDefectReturn` returns true unconditionally and no line
+may opt out.
 
 Never recompute this from current rules — the rule that applied is the rule at
 the time of sale. Disclose it at add-to-cart, not in terms and conditions.

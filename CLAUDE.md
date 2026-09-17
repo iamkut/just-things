@@ -65,8 +65,24 @@ Everything in `prototype/data/catalogue.js` — products, prices, pack sizes,
 weights — is invented and clearly flagged in-page. Do not quote those prices to
 anyone.
 
+## Backend
+
+`backend/` — .NET 10, Clean Architecture, PostgreSQL with snake_case naming.
+See `backend/README.md` to run it.
+
+The two pieces that carry the product are pure and must stay that way:
+
+- `Domain/Pricing/PriceResolver.cs`
+- `Domain/Coverage/CoverageCalculator.cs`
+
+No I/O in either. Both are fully unit-tested, and a change to the pricing rule
+that does not also change `PriceResolverTests` is almost certainly a bug.
+
+The database provider lives only in `Infrastructure/DependencyInjection.cs` and
+`Persistence/DesignTimeDbContextFactory.cs`. Keep it that way.
+
 ## Status
 
-Pre-Phase 0. The commerce platform decision (ADR-0001) is still open: custom
-.NET 10 is recommended, Medusa v2 is the fallback. Do not scaffold the backend
-until that is settled.
+Phase 0. Platform decision taken (ADR-0001): custom .NET 10. Domain, pricing,
+coverage, persistence and read endpoints are built and green. Not yet built:
+cart and checkout persistence, payments, shipping rates, search, admin.

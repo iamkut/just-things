@@ -1,0 +1,155 @@
+/* ==========================================================================
+   Just Things — design tokens
+   Brand colours are authoritative (brand/palette.png).
+   Neutrals and semantics are sampled from the approved homepage mockup
+   (brand/mockups/homepage-desktop.png).
+   ========================================================================== */
+
+:root {
+  /* --- Brand: Prussian Blue -------------------------------------------- */
+  --jt-blue-50:  #eef0f7;
+  --jt-blue-100: #d6d9e8;
+  --jt-blue-200: #adb2d1;
+  --jt-blue-300: #838bb9;
+  --jt-blue-400: #5a64a2;
+  --jt-blue-500: #3a4280;
+  --jt-blue-600: #23255a;  /* Prussian Blue — primary */
+  --jt-blue-700: #1e2050;
+  --jt-blue-800: #191b41;
+  --jt-blue-900: #101128;
+
+  /* --- Brand: Sunset Gold ----------------------------------------------- */
+  --jt-gold-50:  #fdf1e3;
+  --jt-gold-100: #fbe0c0;
+  --jt-gold-200: #f7c286;
+  --jt-gold-300: #f3ad54;
+  --jt-gold-400: #eb9822;  /* Sunset Gold — accent, CTAs */
+  --jt-gold-500: #d4821a;
+  --jt-gold-600: #ae6a15;
+  --jt-gold-700: #855010;
+  --jt-gold-800: #5c380b;
+
+  /* --- Brand: Azure Blue ------------------------------------------------ */
+  --jt-azure-50:  #ecf4fb;
+  --jt-azure-100: #cfe3f4;
+  --jt-azure-200: #9fc6e8;
+  --jt-azure-300: #6fa9dd;
+  --jt-azure-400: #3986c7;  /* Azure Blue — secondary, links */
+  --jt-azure-500: #2e6ca0;
+  --jt-azure-600: #235379;
+  --jt-azure-700: #183952;
+
+  /* --- Neutrals --------------------------------------------------------- */
+  --jt-n-0:   #ffffff;
+  --jt-n-50:  #f5f6f7;
+  --jt-n-100: #f1f1f2;
+  --jt-n-200: #e3e5e8;
+  --jt-n-300: #c9cdd3;
+  --jt-n-400: #a8adb7;
+  --jt-n-500: #757c89;
+  --jt-n-600: #565d69;
+  --jt-n-700: #3d434d;
+  --jt-n-800: #262a31;
+  --jt-n-900: #14171b;
+
+  /* --- Semantic --------------------------------------------------------- */
+  --jt-sale:    #c32026;  /* discounted price, savings badges */
+  --jt-success: #1e8e4e;  /* in stock, order confirmed */
+  --jt-warning: #f7b32b;  /* low stock, tint-to-order notice */
+  --jt-danger:  #c32026;
+  --jt-info:    var(--jt-azure-400);
+  --jt-star:    #fdb416;  /* rating stars */
+
+  /* --- Surfaces (semantic aliases — prefer these in components) ---------- */
+  --jt-bg:            var(--jt-n-50);
+  --jt-surface:       var(--jt-n-0);
+  --jt-surface-sunk:  var(--jt-n-100);
+  --jt-surface-brand: var(--jt-blue-600);
+  --jt-surface-tint:  var(--jt-gold-50);
+  --jt-border:        var(--jt-n-200);
+  --jt-border-strong: var(--jt-n-300);
+
+  --jt-text:          var(--jt-n-800);
+  --jt-text-muted:    var(--jt-n-500);
+  --jt-text-subtle:   var(--jt-n-400);
+  --jt-text-on-brand: var(--jt-n-0);
+  --jt-text-heading:  var(--jt-blue-600);
+  --jt-link:          var(--jt-azure-500);
+
+  /* --- Typography ------------------------------------------------------- */
+  --jt-font-display: "Poppins", "Segoe UI", system-ui, sans-serif;
+  --jt-font-body:    "Inter", "Segoe UI", system-ui, sans-serif;
+
+  --jt-text-xs:   0.75rem;
+  --jt-text-sm:   0.875rem;
+  --jt-text-base: 1rem;
+  --jt-text-lg:   1.125rem;
+  --jt-text-xl:   1.375rem;
+  --jt-text-2xl:  1.75rem;
+  --jt-text-3xl:  2.25rem;
+  --jt-text-4xl:  3rem;
+
+  --jt-leading-tight: 1.15;
+  --jt-leading-snug:  1.35;
+  --jt-leading-base:  1.55;
+
+  /* --- Spacing (4px base) ------------------------------------------------ */
+  --jt-space-1: 0.25rem;
+  --jt-space-2: 0.5rem;
+  --jt-space-3: 0.75rem;
+  --jt-space-4: 1rem;
+  --jt-space-5: 1.25rem;
+  --jt-space-6: 1.5rem;
+  --jt-space-8: 2rem;
+  --jt-space-10: 2.5rem;
+  --jt-space-12: 3rem;
+  --jt-space-16: 4rem;
+
+  /* --- Radii ------------------------------------------------------------- */
+  --jt-radius-sm:   4px;
+  --jt-radius:      8px;
+  --jt-radius-lg:   12px;
+  --jt-radius-pill: 999px;
+
+  /* --- Elevation --------------------------------------------------------- */
+  --jt-shadow-sm: 0 1px 2px rgb(20 23 27 / 0.06);
+  --jt-shadow:    0 2px 8px rgb(20 23 27 / 0.08);
+  --jt-shadow-lg: 0 8px 24px rgb(20 23 27 / 0.12);
+
+  /* --- Layout ------------------------------------------------------------ */
+  --jt-container: 1360px;
+  --jt-sidebar:   264px;
+  --jt-gutter:    16px;
+
+  /* --- Motion ------------------------------------------------------------ */
+  --jt-ease: cubic-bezier(0.2, 0, 0.2, 1);
+  --jt-duration: 160ms;
+}
+
+/* Dark mode is defined so the tokens are complete, but the storefront is
+   designed light-first: paint colour accuracy depends on a white surround. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --jt-bg:            var(--jt-n-900);
+    --jt-surface:       var(--jt-n-800);
+    --jt-surface-sunk:  #1b1f25;
+    --jt-border:        #2f3540;
+    --jt-border-strong: #414955;
+    --jt-text:          var(--jt-n-100);
+    --jt-text-muted:    var(--jt-n-400);
+    --jt-text-heading:  var(--jt-n-0);
+    --jt-link:          var(--jt-azure-300);
+  }
+}
+
+:root[data-theme="dark"] {
+  --jt-bg:            var(--jt-n-900);
+  --jt-surface:       var(--jt-n-800);
+  --jt-surface-sunk:  #1b1f25;
+  --jt-border:        #2f3540;
+  --jt-border-strong: #414955;
+  --jt-text:          var(--jt-n-100);
+  --jt-text-muted:    var(--jt-n-400);
+  --jt-text-heading:  var(--jt-n-0);
+  --jt-link:          var(--jt-azure-300);
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colours — Just Paints</title>
+<meta name="description" content="Browse the Stevensons Real Colours collection by hue, lightness and name.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+<div id="jt-header"></div>
+
+<main class="wrap">
+  <div class="section-head" style="margin-top:var(--jt-space-8)">
+    <div>
+      <h1>Stevensons Real Colours</h1>
+      <p>Search by name or RC code, filter by hue family and light reflectance.
+         Every colour here is tintable across all ranges.</p>
+    </div>
+  </div>
+
+  <div class="colour-layout">
+    <aside class="filters">
+      <div class="filter-group">
+        <h4>Search</h4>
+        <input class="search-input" type="search" id="q" placeholder="Name or RC code" aria-label="Search colours">
+      </div>
+
+      <div class="filter-group">
+        <h4>Hue family</h4>
+        <div id="families"></div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Light reflectance (LRV)</h4>
+        <div class="rangebar">
+          <input type="range" id="lrv" min="0" max="100" value="0" aria-label="Minimum LRV">
+          <span class="xs muted" id="lrv-val" style="min-width:64px">All</span>
+        </div>
+        <p class="xs muted" style="margin:var(--jt-space-2) 0 0">
+          Higher LRV reflects more light. Useful for small or north-facing rooms.
+        </p>
+      </div>
+
+      <div class="filter-group">
+        <h4>Tint base</h4>
+        <div id="bases"></div>
+        <p class="xs muted" style="margin:var(--jt-space-2) 0 0">
+          The base drives the price. Deeper colours need a deeper base.
+        </p>
+      </div>
+
+      <button class="btn btn-ghost btn-block" type="button" id="reset">Clear filters</button>
+    </aside>
+
+    <div>
+      <div class="row" style="justify-content:space-between;margin-bottom:var(--jt-space-4)">
+        <span class="small muted" id="count"></span>
+        <span class="badge badge-info">Screen colours are a guide &mdash; order a sample pot</span>
+      </div>
+      <div class="swatch-grid" id="grid"></div>
+      <p class="muted small" id="empty" hidden style="padding:var(--jt-space-10);text-align:center">
+        No colours match those filters.
+      </p>
+    </div>
+  </div>
+</main>
+
+<div id="jt-footer"></div>
+
+<script src="data/colours.js"></script>
+<script src="data/catalogue.js"></script>
+<script src="js/app.js"></script>
+<script>
+JT.mount("Colours");
+
+const ALL = JT.colours();
+const state = { q: "", families: new Set(), bases: new Set(), minLrv: 0 };
+
+const FAMILY_DOT = {
+  Neutral: "#8b8f96", Red: "#c0392b", Orange: "#e07b1e", Yellow: "#e6c229",
+  Green: "#3f8f4f", Teal: "#2f8f8f", Blue: "#3986c7", Purple: "#7a5ea8", Pink: "#d4699a"
+};
+
+function families() {
+  return [...new Set(ALL.map(c => c.family))]
+    .sort((a, b) => ALL.filter(c => c.family === b).length - ALL.filter(c => c.family === a).length);
+}
+
+function renderFilters() {
+  document.getElementById("families").innerHTML = families().map(f => `
+    <button class="chip" type="button" data-family="${f}" aria-pressed="false">
+      <span class="dot" style="background:${FAMILY_DOT[f] || "#999"}"></span>${f}
+      <span class="muted">${ALL.filter(c => c.family === f).length}</span>
+    </button>`).join("");
+
+  document.getElementById("bases").innerHTML = Object.keys(JT.BASES).map(b => `
+    <button class="chip" type="button" data-base="${b}" aria-pressed="false">
+      ${b}<span class="muted">${ALL.filter(c => c.tintBase === b).length}</span>
+    </button>`).join("");
+
+  document.querySelectorAll("[data-family]").forEach(el =>
+    el.addEventListener("click", () => toggle(state.families, el.dataset.family, el)));
+  document.querySelectorAll("[data-base]").forEach(el =>
+    el.addEventListener("click", () => toggle(state.bases, el.dataset.base, el)));
+}
+
+function toggle(set, value, el) {
+  if (set.has(value)) set.delete(value); else set.add(value);
+  el.setAttribute("aria-pressed", set.has(value));
+  render();
+}
+
+function matches(c) {
+  const q = state.q.trim().toLowerCase();
+  if (q && !(c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q))) return false;
+  if (state.families.size && !state.families.has(c.family)) return false;
+  if (state.bases.size && !state.bases.has(c.tintBase)) return false;
+  if (c.lrv < state.minLrv) return false;
+  return true;
+}
+
+function render() {
+  const list = ALL.filter(matches);
+  document.getElementById("count").textContent =
+    `${list.length} of ${ALL.length} colours`;
+  document.getElementById("empty").hidden = list.length > 0;
+  document.getElementById("grid").innerHTML = list.map(c => `
+    <button class="swatch" type="button" onclick="location.href='product.html?colour=${c.code}'">
+      <span class="fill" style="background:${c.hex};color:${JT.contrastOn(c.hex)}">
+        <span class="lrv">LRV ${c.lrv}</span>
+      </span>
+      <span class="label">
+        <strong>${c.name}</strong>
+        <span>${c.code} &middot; ${c.tintBase} base</span>
+      </span>
+    </button>`).join("");
+}
+
+document.getElementById("q").addEventListener("input", e => { state.q = e.target.value; render(); });
+document.getElementById("lrv").addEventListener("input", e => {
+  state.minLrv = +e.target.value;
+  document.getElementById("lrv-val").textContent = state.minLrv ? `${state.minLrv}+` : "All";
+  render();
+});
+document.getElementById("reset").addEventListener("click", () => {
+  state.q = ""; state.families.clear(); state.bases.clear(); state.minLrv = 0;
+  document.getElementById("q").value = "";
+  document.getElementById("lrv").value = 0;
+  document.getElementById("lrv-val").textContent = "All";
+  document.querySelectorAll(".chip").forEach(el => el.setAttribute("aria-pressed", "false"));
+  render();
+});
+
+renderFilters();
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Just Paints</title>
+<meta name="description" content="Stevensons paint, tinted to order and delivered. Part of Just Things.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+<div id="jt-header"></div>
+
+<main class="wrap">
+
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">Stevensons &middot; tinted to order</div>
+      <h1>Find the colour.<br><em>We'll mix it.</em></h1>
+      <p>180 Real Colours, mixed to order in 24 hours and delivered to your door.
+         Tell us your wall area and we'll work out exactly how much you need &mdash;
+         no leftover tins, no second trip.</p>
+      <div class="row" style="margin-top:var(--jt-space-6)">
+        <a class="btn btn-primary btn-lg" href="colours.html">Browse colours</a>
+        <a class="btn btn-ghost btn-lg" href="product.html" style="color:#fff;border-color:rgba(255,255,255,.4)">Shop paint</a>
+      </div>
+    </div>
+    <div class="hero-swatches" id="hero-swatches"></div>
+  </section>
+
+  <section class="strip">
+    <div class="feature"><span class="ico">&#127912;</span><div><strong>Real colour data</strong><span>Hex and light-reflectance values, not guesswork</span></div></div>
+    <div class="feature"><span class="ico">&#128207;</span><div><strong>Coverage calculator</strong><span>Square metres in, exact basket out</span></div></div>
+    <div class="feature"><span class="ico">&#128666;</span><div><strong>Straight from the factory</strong><span>Tinted and dispatched by Stevensons</span></div></div>
+    <div class="feature"><span class="ico">&#129534;</span><div><strong>Sample pots</strong><span>250 ml from R79 &mdash; try before you commit</span></div></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Popular colours</h2>
+        <p>From the Stevensons Real Colours collection</p>
+      </div>
+      <a href="colours.html">See all 180 &rarr;</a>
+    </div>
+    <div class="grid grid-4" id="popular"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Shop by range</h2>
+        <p>Every range is tintable to the full collection</p>
+      </div>
+    </div>
+    <div class="grid grid-3" id="ranges"></div>
+  </section>
+
+  <section class="section">
+    <div class="card" style="background:var(--jt-blue-600);border:0;color:#fff;padding:var(--jt-space-10)">
+      <div class="grid" style="grid-template-columns:1.4fr 1fr;gap:var(--jt-space-8);align-items:center">
+        <div>
+          <h2 style="color:#fff">Painting for a living?</h2>
+          <p style="color:#dfe3f0;margin-bottom:var(--jt-space-5)">
+            Trade accounts get tiered pricing, saved colour lists for repeat jobs,
+            quotes you can send straight to a client, and VAT invoices on every order.
+          </p>
+          <a class="btn btn-primary" href="#">Apply for a trade account</a>
+        </div>
+        <div class="xs" style="color:#aeb6d4">
+          Coming in phase&nbsp;2 &mdash; shown here to illustrate the trade proposition.
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="jt-footer"></div>
+
+<script src="data/colours.js"></script>
+<script src="data/catalogue.js"></script>
+<script src="js/app.js"></script>
+<script>
+JT.mount("Home");
+
+// Hero swatch mosaic — a spread across the collection.
+(function () {
+  const cs = JT.colours();
+  const picks = [];
+  for (let i = 0; i < 36; i++) picks.push(cs[Math.floor(i * cs.length / 36)]);
+  document.getElementById("hero-swatches").innerHTML =
+    picks.map(c => `<div style="background:${c.hex}" title="${c.name} ${c.code}"></div>`).join("");
+})();
+
+// Popular colours — a hand-picked spread of families.
+(function () {
+  const wanted = ["RC13", "RC4", "RC90", "RC172", "RC47", "RC120", "RC65", "RC150"];
+  const cs = wanted.map(JT.colourByCode).filter(Boolean).slice(0, 4);
+  document.getElementById("popular").innerHTML = cs.map(c => `
+    <a class="card" href="product.html?colour=${c.code}">
+      <div class="tile-swatch" style="background:${c.hex}"></div>
+      <h3>${c.name}</h3>
+      <p class="meta">${c.code} &middot; ${c.family} &middot; LRV ${c.lrv}</p>
+      <div class="price">${JT.BASES[c.tintBase].label}
+        <small>Tint uplift ${JT.zar(JT.BASES[c.tintBase].upliftPerLitre)} per litre</small>
+      </div>
+    </a>`).join("");
+})();
+
+// Ranges
+(function () {
+  document.getElementById("ranges").innerHTML = JT.products().map(p => {
+    const pack = p.packs[p.packs.length - 1];
+    const from = JT.resolvePrice(p, p.packs[0], p.sheens[0], null);
+    return `
+    <a class="card" href="product.html?p=${p.id}">
+      <h3>${p.name}</h3>
+      <p class="meta">${p.brand} &middot; ${p.category} &middot; ${p.coveragePerLitre} m&sup2;/L</p>
+      <p class="small muted">${p.blurb}</p>
+      <div class="price">From ${JT.zar(from.incVat)}
+        <small>${p.packs[0].litres}L in white base, incl. VAT</small>
+      </div>
+    </a>`;
+  }).join("");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product — Just Paints</title>
+<meta name="description" content="Choose a colour, sheen and pack size. Price resolves from the tint base.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+<div id="jt-header"></div>
+
+<main class="wrap">
+  <p class="small muted" style="margin-top:var(--jt-space-5)">
+    <a href="index.html">Just Paints</a> &rsaquo;
+    <a href="colours.html">Colours</a> &rsaquo;
+    <span id="crumb"></span>
+  </p>
+
+  <div class="pdp">
+    <!-- Left: preview -->
+    <div class="stack">
+      <div class="tin">
+        <div class="preview" id="preview">
+          <div class="can">
+            <div class="lid" id="can-lid"></div>
+            <div class="face">
+              <b id="can-name">&nbsp;</b>
+              <span id="can-meta">&nbsp;</span>
+            </div>
+          </div>
+        </div>
+        <div class="caption">
+          <div class="row" style="justify-content:space-between">
+            <span class="xs muted" id="cap-colour"></span>
+            <span class="xs muted" id="cap-lrv"></span>
+          </div>
+          <p class="xs muted" style="margin:var(--jt-space-2) 0 0">
+            Colours shown on screen are a guide and may differ from the mixed tin.
+            Order a 250&nbsp;ml sample pot to check in your own light.
+          </p>
+        </div>
+      </div>
+
+      <!-- Coverage calculator -->
+      <div class="calc">
+        <h3>How much do I need?</h3>
+        <p class="small" style="color:var(--jt-azure-600);margin-bottom:var(--jt-space-4)">
+          Enter the area to cover. We work out the litres and pick the cheapest
+          combination of pack sizes.
+        </p>
+        <div class="calc-inputs">
+          <label>
+            <span class="xs" style="color:var(--jt-azure-600)">Area to cover (m&sup2;)</span>
+            <input type="number" id="area" min="1" step="1" value="60">
+          </label>
+          <label>
+            <span class="xs" style="color:var(--jt-azure-600)">Coats</span>
+            <select id="coats">
+              <option value="1">1 coat</option>
+              <option value="2" selected>2 coats</option>
+              <option value="3">3 coats</option>
+            </select>
+          </label>
+        </div>
+        <div class="calc-result" id="calc-result"></div>
+      </div>
+    </div>
+
+    <!-- Right: configurator -->
+    <div class="stack">
+      <div>
+        <p class="small muted" style="margin:0" id="brandline"></p>
+        <h1 id="title"></h1>
+        <p class="muted" id="blurb"></p>
+        <div class="row">
+          <span class="badge badge-ok" id="stock">In stock</span>
+          <span class="small muted" id="rating"></span>
+        </div>
+      </div>
+
+      <div>
+        <span class="field-label">Colour</span>
+        <button class="colour-picker" type="button" id="open-colour">
+          <span class="sw" id="picker-sw"></span>
+          <span class="name">
+            <strong id="picker-name">Choose a colour</strong>
+            <span class="xs muted" id="picker-meta">180 Real Colours available</span>
+          </span>
+          <span class="btn btn-ghost" style="pointer-events:none">Change</span>
+        </button>
+      </div>
+
+      <div>
+        <span class="field-label">Finish</span>
+        <div class="opts" id="sheens"></div>
+      </div>
+
+      <div>
+        <span class="field-label">Pack size</span>
+        <div class="opts" id="packs"></div>
+      </div>
+
+      <div class="pricebox">
+        <div class="row" style="justify-content:space-between;align-items:flex-end">
+          <div>
+            <div class="big" id="price"></div>
+            <div class="xs muted">incl. VAT at 15%</div>
+          </div>
+          <div class="xs muted" style="text-align:right" id="per-litre"></div>
+        </div>
+
+        <table class="breakdown" id="breakdown"></table>
+
+        <div id="returns" style="margin-top:var(--jt-space-4)"></div>
+
+        <div class="row" style="margin-top:var(--jt-space-5);gap:var(--jt-space-3)">
+          <button class="btn btn-primary btn-lg" style="flex:1" type="button" id="add">Add to basket</button>
+          <button class="btn btn-ghost btn-lg" type="button" id="add-sample">Add sample pot</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Why the price changes with the colour</h3>
+        <p class="small muted" style="margin:0">
+          Paint is mixed from a tinted base. A deep colour needs a deeper base and
+          more colourant than a pastel, so the price resolves from the colour you
+          pick rather than sitting on a fixed SKU. This is the rule the whole
+          catalogue is built on.
+        </p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Colour picker modal -->
+<div id="colour-modal" hidden>
+  <div class="modal-panel">
+    <div class="modal-head">
+      <h3 style="margin:0;flex:1">Choose a colour</h3>
+      <input class="search-input" style="max-width:280px" type="search" id="modal-q" placeholder="Name or RC code">
+      <button class="cart-close" type="button" id="close-colour" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="swatch-grid" id="modal-grid"></div>
+    </div>
+  </div>
+</div>
+
+<div id="jt-footer"></div>
+
+<script src="data/colours.js"></script>
+<script src="data/catalogue.js"></script>
+<script src="js/app.js"></script>
+<script>
+JT.mount("Interior");
+
+const product = JT.productById(JT.param("p")) || JT.products()[0];
+const state = {
+  colour: JT.colourByCode(JT.param("colour")) || null,
+  sheen: product.sheens[0],
+  pack: product.packs[Math.min(1, product.packs.length - 1)]
+};
+
+/* ---------- static bits ---------- */
+document.getElementById("crumb").textContent = product.name;
+document.getElementById("title").textContent = product.name;
+document.getElementById("blurb").textContent = product.blurb;
+document.getElementById("brandline").textContent =
+  `${product.brand} · ${product.range} range · ${product.coveragePerLitre} m² per litre`;
+document.getElementById("rating").innerHTML =
+  `&#9733; ${product.rating} <span class="muted">(${product.reviews} reviews)</span>`;
+if (product.hazard) {
+  document.getElementById("stock").insertAdjacentHTML("afterend",
+    `<span class="badge badge-warn">${product.hazard} &mdash; courier restrictions apply</span>`);
+}
+
+/* ---------- options ---------- */
+function renderOptions() {
+  document.getElementById("sheens").innerHTML = product.sheens.map(s => {
+    const up = window.JT_SHEEN_UPLIFT[s] || 0;
+    return `<button class="opt" type="button" data-sheen="${s}" aria-pressed="${s === state.sheen}">
+      ${s}<small>${up ? "+" + Math.round(up * 100) + "%" : "standard"}</small></button>`;
+  }).join("");
+
+  document.getElementById("packs").innerHTML = product.packs.map(p => {
+    const price = JT.resolvePrice(product, p, state.sheen, state.colour);
+    return `<button class="opt" type="button" data-litres="${p.litres}" aria-pressed="${p.litres === state.pack.litres}">
+      ${p.litres}L<small>${JT.zar(price.incVat)}</small></button>`;
+  }).join("");
+
+  document.querySelectorAll("[data-sheen]").forEach(el => el.addEventListener("click", () => {
+    state.sheen = el.dataset.sheen; renderAll();
+  }));
+  document.querySelectorAll("[data-litres]").forEach(el => el.addEventListener("click", () => {
+    state.pack = product.packs.find(p => p.litres === +el.dataset.litres); renderAll();
+  }));
+}
+
+/* ---------- preview ---------- */
+function renderPreview() {
+  const c = state.colour;
+  const hex = c ? c.hex : "#f2f2f0";
+  document.getElementById("preview").style.background = hex;
+  document.getElementById("can-lid").style.background = hex;
+  document.getElementById("can-name").textContent = c ? c.name : "Factory white";
+  document.getElementById("can-meta").textContent =
+    `${product.name} · ${state.sheen} · ${state.pack.litres}L`;
+  document.getElementById("cap-colour").textContent =
+    c ? `${c.code} · ${c.hex.toUpperCase()} · ${c.family}` : "No tint — factory white base";
+  document.getElementById("cap-lrv").textContent = c ? `LRV ${c.lrv}` : "";
+
+  document.getElementById("picker-sw").style.background = hex;
+  document.getElementById("picker-name").textContent = c ? `${c.name} ${c.code}` : "Choose a colour";
+  document.getElementById("picker-meta").textContent = c
+    ? `${JT.BASES[c.tintBase].label} · LRV ${c.lrv}`
+    : "180 Real Colours available";
+}
+
+/* ---------- price ---------- */
+function renderPrice() {
+  const p = JT.resolvePrice(product, state.pack, state.sheen, state.colour);
+  document.getElementById("price").textContent = JT.zar(p.incVat);
+  document.getElementById("per-litre").innerHTML =
+    `${JT.zar(p.incVat / state.pack.litres)} per litre<br>${state.pack.weightKg} kg`;
+
+  const rows = [
+    [`${state.pack.litres}L pack, white base`, p.packPrice],
+    [`${state.sheen} finish`, p.sheenUplift],
+    [`${p.tintBaseLabel} (${JT.zar(JT.BASES[p.tintBase].upliftPerLitre)}/L × ${state.pack.litres}L)`, p.tintUplift],
+    ["VAT at 15%", p.vat]
+  ].filter(r => r[1] !== 0 || r[0].startsWith(String(state.pack.litres)));
+
+  document.getElementById("breakdown").innerHTML =
+    rows.map(([k, v]) => `<tr><td>${k}</td><td>${JT.zar(v)}</td></tr>`).join("") +
+    `<tr class="total"><td>Total incl. VAT</td><td>${JT.zar(p.incVat)}</td></tr>`;
+
+  const tinted = !!state.colour;
+  document.getElementById("returns").innerHTML = tinted
+    ? `<span class="badge badge-warn">Mixed to order &mdash; cannot be returned</span>
+       <p class="xs muted" style="margin:var(--jt-space-2) 0 0">
+         Tinted paint is made to your specification, so the 7-day cooling-off right
+         does not apply. It remains returnable if it does not match what you ordered.</p>`
+    : `<span class="badge badge-ok">Returnable within 7 days</span>
+       <p class="xs muted" style="margin:var(--jt-space-2) 0 0">
+         Untinted factory white is a stocked item and can be returned unopened.</p>`;
+}
+
+/* ---------- calculator ---------- */
+function renderCalc() {
+  const area = +document.getElementById("area").value || 0;
+  const coats = +document.getElementById("coats").value;
+  const litres = JT.litresNeeded(area, coats, product.coveragePerLitre);
+  const box = document.getElementById("calc-result");
+
+  if (!litres) { box.innerHTML = `<span class="muted">Enter an area to see what you need.</span>`; return; }
+
+  const best = JT.bestPackCombination(product, litres, state.sheen, state.colour);
+  if (!best) { box.innerHTML = `<span class="muted">No pack combination found.</span>`; return; }
+
+  box.innerHTML = `
+    <p style="margin:0 0 var(--jt-space-3)">
+      <strong>${area} m&sup2; × ${coats} coats</strong> at ${product.coveragePerLitre} m&sup2;/L
+      needs <strong>${litres} litres</strong>.
+    </p>
+    <p style="margin:0 0 var(--jt-space-3)">Cheapest combination:</p>
+    <ul style="margin:0 0 var(--jt-space-3);padding-left:1.1rem">
+      ${best.lines.map(l => `<li>${l.qty} &times; ${l.pack.litres}L &mdash; ${JT.zar(l.each * l.qty)}</li>`).join("")}
+    </ul>
+    <div class="row" style="justify-content:space-between">
+      <span><strong>${JT.zar(best.cost)}</strong>
+        <span class="muted">for ${best.litres}L${best.surplus > 0 ? ` (${best.surplus}L spare)` : ""}</span></span>
+      <button class="btn btn-secondary" type="button" id="add-calc">Add this to basket</button>
+    </div>`;
+
+  document.getElementById("add-calc").addEventListener("click", () => {
+    best.lines.forEach(l => addLine(l.pack, l.qty));
+  });
+}
+
+/* ---------- cart ---------- */
+function addLine(pack, qty) {
+  const p = JT.resolvePrice(product, pack, state.sheen, state.colour);
+  JT.addToCart({
+    productId: product.id,
+    name: product.name,
+    sheen: state.sheen,
+    litres: pack.litres,
+    weightKg: pack.weightKg,
+    qty: qty,
+    colourCode: state.colour ? state.colour.code : null,
+    colourName: state.colour ? state.colour.name : null,
+    colourHex: state.colour ? state.colour.hex : null,
+    tintBaseLabel: p.tintBaseLabel,
+    madeToOrder: !!state.colour,
+    incVat: p.incVat
+  });
+}
+
+document.getElementById("add").addEventListener("click", () => addLine(state.pack, 1));
+document.getElementById("add-sample").addEventListener("click", () => {
+  const s = window.JT_SAMPLE_POT;
+  const p = JT.resolvePrice(product, s, state.sheen, state.colour);
+  JT.addToCart({
+    productId: product.id + "-sample",
+    name: product.name + " — sample pot",
+    sheen: state.sheen, litres: s.litres, weightKg: s.weightKg, qty: 1,
+    colourCode: state.colour ? state.colour.code : null,
+    colourName: state.colour ? state.colour.name : null,
+    colourHex: state.colour ? state.colour.hex : null,
+    tintBaseLabel: p.tintBaseLabel,
+    madeToOrder: !!state.colour,
+    incVat: p.incVat
+  });
+});
+
+/* ---------- colour modal ---------- */
+const modal = document.getElementById("colour-modal");
+function renderModal(q) {
+  const term = (q || "").trim().toLowerCase();
+  const list = JT.colours().filter(c =>
+    !term || c.name.toLowerCase().includes(term) || c.code.toLowerCase().includes(term));
+  document.getElementById("modal-grid").innerHTML = list.map(c => `
+    <button class="swatch" type="button" data-code="${c.code}">
+      <span class="fill" style="background:${c.hex};color:${JT.contrastOn(c.hex)}">
+        <span class="lrv">LRV ${c.lrv}</span>
+      </span>
+      <span class="label"><strong>${c.name}</strong><span>${c.code} &middot; ${c.tintBase} base</span></span>
+    </button>`).join("");
+  document.querySelectorAll("#modal-grid [data-code]").forEach(el =>
+    el.addEventListener("click", () => {
+      state.colour = JT.colourByCode(el.dataset.code);
+      modal.hidden = true;
+      document.body.style.overflow = "";
+      renderAll();
+    }));
+}
+document.getElementById("open-colour").addEventListener("click", () => {
+  modal.hidden = false;
+  document.body.style.overflow = "hidden";
+  renderModal(document.getElementById("modal-q").value);
+});
+document.getElementById("close-colour").addEventListener("click", () => {
+  modal.hidden = true; document.body.style.overflow = "";
+});
+modal.addEventListener("click", e => {
+  if (e.target === modal) { modal.hidden = true; document.body.style.overflow = ""; }
+});
+document.getElementById("modal-q").addEventListener("input", e => renderModal(e.target.value));
+
+document.getElementById("area").addEventListener("input", renderCalc);
+document.getElementById("coats").addEventListener("change", renderCalc);
+
+function renderAll() { renderOptions(); renderPreview(); renderPrice(); renderCalc(); }
+renderAll();
+</script>
+</body>
+</html>

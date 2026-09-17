@@ -1,0 +1,68 @@
+# Just Things — working notes
+
+South African marketplace for tools, hardware and home improvement. Launching
+through one vertical: **Just Paints** at `paints.justthings.co.za`, anchored by
+Stevensons on a dropship arrangement (terms unconfirmed).
+
+## Read first
+
+- `docs/data-model.md` — the catalogue, colour and pricing model
+- `docs/decisions/` — ADRs; 0002 is the one everything else depends on
+
+## The rule that governs the codebase
+
+**Colour is a line-item configuration, not a variant axis.** A `ProductVariant`
+carries only sheen and pack size. The chosen colour rides on the cart/order line
+with the tint base it resolves to.
+
+Consequences that bite if forgotten:
+
+- Price is **resolved at runtime**, never read off a row:
+  `variant price + sheen uplift + (base uplift/L x litres)`, VAT applied last,
+  rounded once at the end.
+- The resolved price and the full colour record are **snapshotted onto the cart
+  line**. Colours get renamed and withdrawn; orders must still print correctly.
+- Returnability is computed **once at order placement** and stored. Tinted lines
+  are excluded from the ECTA cooling-off right; untinted ones are not.
+
+## Conventions
+
+- Money is `decimal`, never float. Store ex-VAT, display inc-VAT (15%).
+- ZAR only. Format as `R 1 234,56` — space thousands, comma decimal.
+- South African English: colour, litre, organisation.
+- `Offer` (seller x variant) is first-class even with one seller. Do not collapse
+  it into `ProductVariant` — see ADR-0004.
+
+## Brand
+
+Palette is fixed: Prussian Blue `#23255A`, Sunset Gold `#EB9822`, Azure Blue
+`#3986C7`. Tokens live in `brand/tokens.css`; never hardcode a hex in a
+component. The approved homepage mockup is `brand/mockups/homepage-desktop.png`.
+
+The storefront is **light-only** (`data-theme="light"`). Paint colour judgement
+needs a white surround, so dark mode is deliberately not offered on customer-
+facing pages. Dark tokens exist for admin surfaces.
+
+## Prototype
+
+`prototype/` is a static clickable storefront — no build step, no framework.
+Run it with:
+
+```bash
+python -m http.server 4173 --directory prototype
+```
+
+Colour data in `prototype/data/colours.js` is real: 180 names, RC codes and hex
+captured from the rendered swatches on stevensons.co.za. `lrv` is derived from
+hex; `family` and `tintBase` are **derived heuristics for the prototype only** —
+real base assignment must come from Stevensons' tinting system.
+
+Everything in `prototype/data/catalogue.js` — products, prices, pack sizes,
+weights — is invented and clearly flagged in-page. Do not quote those prices to
+anyone.
+
+## Status
+
+Pre-Phase 0. The commerce platform decision (ADR-0001) is still open: custom
+.NET 10 is recommended, Medusa v2 is the fallback. Do not scaffold the backend
+until that is settled.

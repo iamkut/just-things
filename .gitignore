@@ -36,3 +36,7 @@ npm-debug.log*
 
 # Local tooling
 .claude/settings.local.json
+
+# Scratch
+rc.html
+*.scratch.*

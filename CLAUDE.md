@@ -57,6 +57,10 @@ captured from the rendered swatches on stevensons.co.za. `lrv` is derived from
 hex; `family` and `tintBase` are **derived heuristics for the prototype only** —
 real base assignment must come from Stevensons' tinting system.
 
+`prototype/css/tokens.css` is a **copy** of `brand/tokens.css`, kept so the
+prototype folder stays self-contained and zippable for a partner. `brand/` is the
+source of truth — if you change tokens, copy the file across.
+
 Everything in `prototype/data/catalogue.js` — products, prices, pack sizes,
 weights — is invented and clearly flagged in-page. Do not quote those prices to
 anyone.

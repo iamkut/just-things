@@ -30,8 +30,28 @@ then others. The options were a path (`justthings.co.za/paints`), a subdomain
 - Analytics needs cross-subdomain tracking configured from day one, not
   retrofitted
 
+## Branding
+
+Each vertical is **its own brand**, not a badged version of the parent. The
+storefront is **Just Paints** — its own wordmark, its own voice. It is never
+"Just Things Paints", and the parent wordmark never appears with a category
+label bolted onto it.
+
+Just Things is the overarching marketplace and appears as:
+
+- a way back up, in the utility bar above the masthead
+- an "is part of Just Things" note in the footer
+- the seller-facing brand ("Sell on Just Things")
+
+The reason is commercial, not cosmetic. A manufacturer anchors a vertical
+because it reads as a specialist destination. A category page wearing a parent
+marketplace's logo reads as a shelf, and is worth much less to them.
+
+The shared platform underneath is unaffected — one codebase, one cart, one
+account. Shared infrastructure, separate identities.
+
 ## Implementation
 
 One Next.js application. The vertical is resolved from the request hostname;
-theme tokens, navigation and category tree follow from it. Adding Just Tools is
-a row and a DNS record.
+theme tokens, navigation, category tree **and brand lockup** follow from it.
+Adding Just Tools is a row, a lockup and a DNS record.

@@ -89,15 +89,7 @@
   aspect-ratio: 4 / 3; display: grid; place-items: center; position: relative;
   transition: background var(--jt-duration) var(--jt-ease);
 }
-.tin .preview .can {
-  width: 46%; aspect-ratio: 3 / 4; border-radius: 10px;
-  background: rgb(255 255 255 / .92); box-shadow: 0 12px 34px rgb(0 0 0 / .22);
-  display: flex; flex-direction: column; justify-content: space-between; padding: 14px;
-}
-.tin .preview .can .lid { height: 14px; border-radius: 4px; }
-.tin .preview .can .face { font-family: var(--jt-font-display); color: var(--jt-blue-600); }
-.tin .preview .can .face b { display: block; font-size: 15px; line-height: 1.2; }
-.tin .preview .can .face span { font-size: 11px; color: var(--jt-text-muted); }
+.tin .preview .tin-art { max-width: 46%; filter: drop-shadow(0 12px 24px rgb(0 0 0 / .25)); }
 .tin .caption { padding: var(--jt-space-4); border-top: 1px solid var(--jt-border); }
 
 .opts { display: flex; gap: var(--jt-space-2); flex-wrap: wrap; }
@@ -170,6 +162,96 @@
 }
 .modal-head { padding: var(--jt-space-5); border-bottom: 1px solid var(--jt-border); display: flex; gap: var(--jt-space-4); align-items: center; }
 .modal-body { overflow-y: auto; padding: var(--jt-space-5); }
+
+/* --- Just Paints lockup ----------------------------------------------------
+   Just Paints is its own storefront brand. Just Things is the parent
+   marketplace and lives in the utility bar and the footer, never as a prefix. */
+.brand { gap: var(--jt-space-3); }
+.brand-tile { width: 46px; height: 46px; flex-shrink: 0; }
+.brand-tile svg { width: 100%; height: 100%; display: block; border-radius: 3px; }
+.brand-word {
+  display: flex; flex-direction: column;
+  font-family: var(--jt-font-display); font-weight: 700;
+  font-size: 25px; line-height: 0.88; letter-spacing: -0.035em;
+  color: var(--jt-blue-600); text-transform: lowercase;
+}
+
+.parent-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-weight: 600; opacity: .85;
+}
+.parent-link svg { width: 20px; height: 8px; display: block; }
+.parent-link:hover { opacity: 1; }
+.utility-divider {
+  width: 1px; height: 14px; background: rgb(255 255 255 / .25);
+}
+
+/* --- Product grid ----------------------------------------------------------- */
+.product-grid {
+  display: grid; gap: var(--jt-space-5);
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.product-card {
+  display: flex; flex-direction: column;
+  background: var(--jt-surface); border: 1px solid var(--jt-border);
+  border-radius: var(--jt-radius); overflow: hidden;
+  text-decoration: none; color: inherit;
+  transition: box-shadow var(--jt-duration) var(--jt-ease), border-color var(--jt-duration) var(--jt-ease);
+}
+.product-card:hover { box-shadow: var(--jt-shadow); border-color: var(--jt-border-strong); }
+
+.product-art {
+  position: relative; background: var(--jt-n-50);
+  border-bottom: 1px solid var(--jt-border);
+  display: grid; place-items: center; padding: var(--jt-space-4);
+}
+.product-art .art-flag { position: absolute; top: 10px; right: 10px; }
+
+.tin-art { width: 100%; max-width: 132px; height: auto; display: block; }
+.tin-label {
+  font-family: var(--jt-font-display); font-size: 13px; font-weight: 700;
+  fill: var(--jt-blue-600); text-transform: lowercase; letter-spacing: -0.02em;
+}
+.tin-sub {
+  font-family: var(--jt-font-body); font-size: 9px; fill: var(--jt-n-500);
+  letter-spacing: .08em; text-transform: uppercase;
+}
+
+.product-body { padding: var(--jt-space-4); display: flex; flex-direction: column; flex: 1; }
+.product-brand {
+  font-size: var(--jt-text-xs); color: var(--jt-text-muted);
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.product-card h3 { font-size: var(--jt-text-base); margin: 4px 0 6px; }
+.product-blurb {
+  font-size: var(--jt-text-sm); color: var(--jt-text-muted);
+  margin: 0 0 var(--jt-space-3);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.product-meta {
+  display: flex; justify-content: space-between; gap: var(--jt-space-2);
+  font-size: var(--jt-text-sm); color: var(--jt-star);
+}
+.product-meta .muted { color: var(--jt-text-muted); }
+.product-sizes {
+  font-size: var(--jt-text-xs); margin-top: 4px;
+  padding-bottom: var(--jt-space-3); border-bottom: 1px solid var(--jt-border);
+}
+.product-price { margin-top: auto; padding-top: var(--jt-space-3); }
+.product-price strong {
+  display: block; font-family: var(--jt-font-display);
+  font-size: var(--jt-text-lg); color: var(--jt-blue-600);
+}
+
+.inline-select {
+  border: 1px solid var(--jt-border-strong); border-radius: var(--jt-radius-sm);
+  padding: 4px 8px; font: inherit; font-size: var(--jt-text-sm);
+  background: var(--jt-surface); color: var(--jt-text); margin-left: 6px;
+}
+
+.colour-picker.compact { padding: var(--jt-space-2); gap: var(--jt-space-3); }
+.colour-picker.compact .sw { width: 38px; height: 38px; }
 
 @media (max-width: 1000px) {
   .pdp { grid-template-columns: 1fr; }

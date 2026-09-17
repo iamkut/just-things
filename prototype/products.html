@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paint — Just Paints</title>
+<meta name="description" content="Interior, exterior, roof, wood and enamel paint from Stevensons, tinted to order.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+<div id="jt-header"></div>
+
+<main class="wrap">
+  <div class="section-head" style="margin-top:var(--jt-space-8)">
+    <div>
+      <h1 id="page-title">All paint</h1>
+      <p id="page-sub">Every range is tintable to all 180 Stevensons Real Colours.</p>
+    </div>
+  </div>
+
+  <div class="colour-layout">
+    <aside class="filters">
+      <div class="filter-group">
+        <h4>Category</h4>
+        <div id="f-category"></div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Finish</h4>
+        <div id="f-sheen"></div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Pack size</h4>
+        <div id="f-pack"></div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Preview in a colour</h4>
+        <button class="colour-picker compact" type="button" id="open-colour">
+          <span class="sw" id="picker-sw"></span>
+          <span class="name">
+            <strong id="picker-name">Factory white</strong>
+            <span class="xs muted" id="picker-meta">Tap to choose</span>
+          </span>
+        </button>
+        <p class="xs muted" style="margin:var(--jt-space-2) 0 0">
+          Prices below update to the base that colour needs.
+        </p>
+      </div>
+
+      <button class="btn btn-ghost btn-block" type="button" id="reset">Clear filters</button>
+    </aside>
+
+    <div>
+      <div class="row" style="justify-content:space-between;margin-bottom:var(--jt-space-4)">
+        <span class="small muted" id="count"></span>
+        <label class="small muted">
+          Sort
+          <select id="sort" class="inline-select">
+            <option value="popular">Most popular</option>
+            <option value="price-asc">Price, low to high</option>
+            <option value="price-desc">Price, high to low</option>
+            <option value="name">Name</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="product-grid" id="grid"></div>
+
+      <p class="muted small" id="empty" hidden style="padding:var(--jt-space-10);text-align:center">
+        No paint matches those filters.
+      </p>
+    </div>
+  </div>
+</main>
+
+<!-- Colour picker modal -->
+<div id="colour-modal" hidden>
+  <div class="modal-panel">
+    <div class="modal-head">
+      <h3 style="margin:0;flex:1">Preview in a colour</h3>
+      <input class="search-input" style="max-width:260px" type="search" id="modal-q" placeholder="Name or RC code">
+      <button class="cart-close" type="button" id="close-colour" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <button class="btn btn-ghost btn-block" type="button" id="clear-colour"
+              style="margin-bottom:var(--jt-space-4)">Show factory white</button>
+      <div class="swatch-grid" id="modal-grid"></div>
+    </div>
+  </div>
+</div>
+
+<div id="jt-footer"></div>
+
+<script src="data/colours.js"></script>
+<script src="data/catalogue.js"></script>
+<script src="js/app.js"></script>
+<script>
+JT.mount("All paint");
+
+const ALL = JT.products();
+const state = {
+  categories: new Set(),
+  sheens: new Set(),
+  packs: new Set(),
+  colour: JT.colourByCode(JT.param("colour")) || null,
+  sort: "popular",
+};
+
+// A category in the URL preselects the filter, so the nav lands somewhere useful.
+const fromUrl = JT.param("category");
+if (fromUrl && ALL.some(p => p.category === fromUrl)) {
+  state.categories.add(fromUrl);
+  document.getElementById("page-title").textContent = fromUrl;
+  document.getElementById("page-sub").textContent =
+    `${fromUrl} paint from Stevensons, tinted to order.`;
+  // Only one nav item may be current: the category takes it from "All paint".
+  const target = document.querySelector(
+    "nav.mainnav a[href*='" + encodeURIComponent(fromUrl).replace(/%20/g, "+") + "']");
+  if (target) {
+    document.querySelectorAll("nav.mainnav a[aria-current]")
+      .forEach(a => a.removeAttribute("aria-current"));
+    target.setAttribute("aria-current", "page");
+  }
+}
+
+const allSheens = [...new Set(ALL.flatMap(p => p.sheens))];
+const allPacks = [...new Set(ALL.flatMap(p => p.packs.map(k => k.litres)))].sort((a, b) => a - b);
+
+function chip(kind, value, label, count) {
+  return `<button class="chip" type="button" data-kind="${kind}" data-value="${value}" aria-pressed="false">
+    ${label}${count !== undefined ? `<span class="muted">${count}</span>` : ""}</button>`;
+}
+
+function renderFilters() {
+  document.getElementById("f-category").innerHTML = JT.categories()
+    .map(c => chip("categories", c, c, ALL.filter(p => p.category === c).length)).join("");
+  document.getElementById("f-sheen").innerHTML = allSheens
+    .map(s => chip("sheens", s, s, ALL.filter(p => p.sheens.includes(s)).length)).join("");
+  document.getElementById("f-pack").innerHTML = allPacks
+    .map(l => chip("packs", l, `${l}L`, ALL.filter(p => p.packs.some(k => k.litres === l)).length)).join("");
+
+  document.querySelectorAll("[data-kind]").forEach(el => {
+    const set = state[el.dataset.kind];
+    const raw = el.dataset.kind === "packs" ? Number(el.dataset.value) : el.dataset.value;
+    if (set.has(raw)) el.setAttribute("aria-pressed", "true");
+    el.addEventListener("click", () => {
+      if (set.has(raw)) set.delete(raw); else set.add(raw);
+      el.setAttribute("aria-pressed", set.has(raw));
+      render();
+    });
+  });
+}
+
+function matches(p) {
+  if (state.categories.size && !state.categories.has(p.category)) return false;
+  if (state.sheens.size && !p.sheens.some(s => state.sheens.has(s))) return false;
+  if (state.packs.size && !p.packs.some(k => state.packs.has(k.litres))) return false;
+  return true;
+}
+
+function sorted(list) {
+  const price = p => JT.fromPrice(p, state.colour);
+  switch (state.sort) {
+    case "price-asc": return [...list].sort((a, b) => price(a) - price(b));
+    case "price-desc": return [...list].sort((a, b) => price(b) - price(a));
+    case "name": return [...list].sort((a, b) => a.name.localeCompare(b.name));
+    default: return [...list].sort((a, b) => b.reviews - a.reviews);
+  }
+}
+
+function renderPicker() {
+  const c = state.colour;
+  document.getElementById("picker-sw").style.background = c ? c.hex : "#f4f4f2";
+  document.getElementById("picker-name").textContent = c ? `${c.name} ${c.code}` : "Factory white";
+  document.getElementById("picker-meta").textContent = c
+    ? JT.BASES[c.tintBase].label
+    : "Tap to choose";
+}
+
+function render() {
+  const list = sorted(ALL.filter(matches));
+  document.getElementById("count").textContent = `${list.length} of ${ALL.length} products`;
+  document.getElementById("empty").hidden = list.length > 0;
+  document.getElementById("grid").innerHTML =
+    list.map(p => JT.productCard(p, state.colour)).join("");
+  renderPicker();
+}
+
+/* colour modal */
+const modal = document.getElementById("colour-modal");
+function renderModal(q) {
+  const term = (q || "").trim().toLowerCase();
+  const list = JT.colours().filter(c =>
+    !term || c.name.toLowerCase().includes(term) || c.code.toLowerCase().includes(term));
+  document.getElementById("modal-grid").innerHTML = list.map(c => `
+    <button class="swatch" type="button" data-code="${c.code}">
+      <span class="fill" style="background:${c.hex};color:${JT.contrastOn(c.hex)}">
+        <span class="lrv">LRV ${c.lrv}</span>
+      </span>
+      <span class="label"><strong>${c.name}</strong><span>${c.code} &middot; ${c.tintBase} base</span></span>
+    </button>`).join("");
+  document.querySelectorAll("#modal-grid [data-code]").forEach(el =>
+    el.addEventListener("click", () => {
+      state.colour = JT.colourByCode(el.dataset.code);
+      closeModal();
+      render();
+    }));
+}
+function closeModal() { modal.hidden = true; document.body.style.overflow = ""; }
+
+document.getElementById("open-colour").addEventListener("click", () => {
+  modal.hidden = false;
+  document.body.style.overflow = "hidden";
+  renderModal(document.getElementById("modal-q").value);
+});
+document.getElementById("close-colour").addEventListener("click", closeModal);
+document.getElementById("clear-colour").addEventListener("click", () => {
+  state.colour = null; closeModal(); render();
+});
+modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+document.getElementById("modal-q").addEventListener("input", e => renderModal(e.target.value));
+
+document.getElementById("sort").addEventListener("change", e => {
+  state.sort = e.target.value; render();
+});
+document.getElementById("reset").addEventListener("click", () => {
+  state.categories.clear(); state.sheens.clear(); state.packs.clear();
+  state.colour = null;
+  document.querySelectorAll(".chip").forEach(el => el.setAttribute("aria-pressed", "false"));
+  render();
+});
+
+renderFilters();
+render();
+</script>
+</body>
+</html>

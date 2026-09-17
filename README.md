@@ -22,14 +22,15 @@ and one seller.
 | `docs/` | Architecture, data model and decision records |
 | `docs/decisions/` | ADRs — the reasoning behind irreversible choices |
 | `prototype/` | Clickable Just Paints storefront prototype (static, no build step) |
+| `tools/` | Dev helpers, e.g. the no-cache static server |
 | `backend/` | Commerce core: .NET 10, Clean Architecture, PostgreSQL |
 
 ## Running the prototype
 
-No build step. Serve the folder:
+No build step:
 
 ```bash
-npx serve prototype
+python tools/dev-server.py 4173 prototype
 ```
 
 ## Strategy

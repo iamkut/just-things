@@ -25,8 +25,8 @@
          Tell us your wall area and we'll work out exactly how much you need &mdash;
          no leftover tins, no second trip.</p>
       <div class="row" style="margin-top:var(--jt-space-6)">
-        <a class="btn btn-primary btn-lg" href="colours.html">Browse colours</a>
-        <a class="btn btn-ghost btn-lg" href="product.html" style="color:#fff;border-color:rgba(255,255,255,.4)">Shop paint</a>
+        <a class="btn btn-primary btn-lg" href="products.html">Shop paint</a>
+        <a class="btn btn-ghost btn-lg" href="colours.html" style="color:#fff;border-color:rgba(255,255,255,.4)">Browse colours</a>
       </div>
     </div>
     <div class="hero-swatches" id="hero-swatches"></div>
@@ -42,22 +42,33 @@
   <section class="section">
     <div class="section-head">
       <div>
-        <h2>Popular colours</h2>
-        <p>From the Stevensons Real Colours collection</p>
+        <h2>Shop by category</h2>
+        <p>Every range is tintable to all 180 Real Colours</p>
       </div>
-      <a href="colours.html">See all 180 &rarr;</a>
     </div>
-    <div class="grid grid-4" id="popular"></div>
+    <div class="grid grid-4" id="categories"></div>
   </section>
 
   <section class="section">
     <div class="section-head">
       <div>
-        <h2>Shop by range</h2>
-        <p>Every range is tintable to the full collection</p>
+        <h2>Popular paint</h2>
+        <p>What Stevensons sells most of</p>
       </div>
+      <a href="products.html">See all paint &rarr;</a>
     </div>
-    <div class="grid grid-3" id="ranges"></div>
+    <div class="product-grid" id="featured"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Colours people are choosing</h2>
+        <p>From the Stevensons Real Colours collection</p>
+      </div>
+      <a href="colours.html">See all 180 &rarr;</a>
+    </div>
+    <div class="grid grid-4" id="popular"></div>
   </section>
 
   <section class="section">
@@ -97,36 +108,44 @@ JT.mount("Home");
     picks.map(c => `<div style="background:${c.hex}" title="${c.name} ${c.code}"></div>`).join("");
 })();
 
-// Popular colours — a hand-picked spread of families.
+// Categories, each illustrated with a tin in a representative colour.
 (function () {
-  const wanted = ["RC13", "RC4", "RC90", "RC172", "RC47", "RC120", "RC65", "RC150"];
-  const cs = wanted.map(JT.colourByCode).filter(Boolean).slice(0, 4);
+  const swatch = { "Interior walls": "RC75", "Exterior walls": "RC85", "Roof": "RC140",
+                   "Wood care": "RC19", "Enamel & metal": "RC102" };
+  document.getElementById("categories").innerHTML = JT.categories().map(cat => {
+    const count = JT.products().filter(p => p.category === cat).length;
+    const c = JT.colourByCode(swatch[cat]);
+    return `
+    <a class="card" href="products.html?category=${encodeURIComponent(cat)}" style="text-align:center">
+      <div style="display:grid;place-items:center;margin-bottom:var(--jt-space-2)">
+        ${JT.tinSvg(c ? c.hex : null, { label: cat.split(" ")[0].toLowerCase() })}
+      </div>
+      <h3 style="margin-bottom:2px">${cat}</h3>
+      <p class="meta" style="margin:0">${count} product${count === 1 ? "" : "s"}</p>
+    </a>`;
+  }).join("");
+})();
+
+// Featured products — real product cards.
+(function () {
+  const featured = [...JT.products()].sort((a, b) => b.reviews - a.reviews).slice(0, 4);
+  document.getElementById("featured").innerHTML =
+    featured.map(p => JT.productCard(p, null)).join("");
+})();
+
+// Popular colours — these link into the catalogue filtered to that colour.
+(function () {
+  const wanted = ["RC53", "RC120", "RC172", "RC150"];
+  const cs = wanted.map(JT.colourByCode).filter(Boolean);
   document.getElementById("popular").innerHTML = cs.map(c => `
-    <a class="card" href="product.html?colour=${c.code}">
+    <a class="card" href="products.html?colour=${c.code}">
       <div class="tile-swatch" style="background:${c.hex}"></div>
       <h3>${c.name}</h3>
       <p class="meta">${c.code} &middot; ${c.family} &middot; LRV ${c.lrv}</p>
-      <div class="price">${JT.BASES[c.tintBase].label}
-        <small>Tint uplift ${JT.zar(JT.BASES[c.tintBase].upliftPerLitre)} per litre</small>
-      </div>
+      <p class="small muted" style="margin:0">
+        Needs a ${c.tintBase.toLowerCase()} base &mdash; see it on every range
+      </p>
     </a>`).join("");
-})();
-
-// Ranges
-(function () {
-  document.getElementById("ranges").innerHTML = JT.products().map(p => {
-    const pack = p.packs[p.packs.length - 1];
-    const from = JT.resolvePrice(p, p.packs[0], p.sheens[0], null);
-    return `
-    <a class="card" href="product.html?p=${p.id}">
-      <h3>${p.name}</h3>
-      <p class="meta">${p.brand} &middot; ${p.category} &middot; ${p.coveragePerLitre} m&sup2;/L</p>
-      <p class="small muted">${p.blurb}</p>
-      <div class="price">From ${JT.zar(from.incVat)}
-        <small>${p.packs[0].litres}L in white base, incl. VAT</small>
-      </div>
-    </a>`;
-  }).join("");
 })();
 </script>
 </body>

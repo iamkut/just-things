@@ -12,12 +12,6 @@
   /* ---------- money ------------------------------------------------------ */
   const round2 = (n) => Math.round((n + Number.EPSILON) * 100) / 100;
 
-  function money(n) {
-    return "R " + round2(n).toFixed(2)
-      .replace(".", ",")
-      .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  }
-  // Fix: group only the integer part.
   function zar(n) {
     const v = round2(n).toFixed(2).split(".");
     const int = v[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -43,8 +37,13 @@
     };
   }
 
+  /** Cheapest inclusive price across a product's packs, for "from" labels. */
+  function fromPrice(product, colour) {
+    const sheen = product.sheens[0];
+    return Math.min(...product.packs.map(p => resolvePrice(product, p, sheen, colour).incVat));
+  }
+
   /* ---------- coverage calculator ---------------------------------------- */
-  /* Returns the cheapest combination of pack sizes covering the litres needed. */
   function litresNeeded(areaM2, coats, coveragePerLitre) {
     if (!areaM2 || !coveragePerLitre) return 0;
     return round2((areaM2 * coats) / coveragePerLitre);
@@ -93,6 +92,72 @@
     };
   }
 
+  /* ---------- paint tin artwork ------------------------------------------ */
+  /* Products have no photography yet, so every tin is drawn. It doubles as
+     the colour preview on the product page: the lid and the label stripe
+     carry whatever colour the customer has chosen. */
+  function tinSvg(hex, opts) {
+    const o = opts || {};
+    const colour = hex || "#e9eaec";
+    const ink = contrastOn(colour);
+    const label = o.label || "just paints";
+    const sub = o.sub || "";
+    return `
+<svg class="tin-art" viewBox="0 0 160 180" role="img" aria-label="${label} tin">
+  <defs>
+    <linearGradient id="g-body" x1="0" x2="1">
+      <stop offset="0"    stop-color="#d7dae0"/>
+      <stop offset="0.18" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#f2f3f5"/>
+      <stop offset="1"    stop-color="#c9ccd3"/>
+    </linearGradient>
+    <linearGradient id="g-lid" x1="0" x2="1">
+      <stop offset="0"    stop-color="${colour}" stop-opacity="0.82"/>
+      <stop offset="0.35" stop-color="${colour}"/>
+      <stop offset="1"    stop-color="${colour}" stop-opacity="0.72"/>
+    </linearGradient>
+  </defs>
+  <path d="M34 34 Q80 6 126 34" fill="none" stroke="#9aa0aa" stroke-width="4" stroke-linecap="round"/>
+  <rect x="28" y="40" width="104" height="122" rx="7" fill="url(#g-body)" stroke="#b6bac2"/>
+  <ellipse cx="80" cy="40" rx="52" ry="12" fill="url(#g-lid)" stroke="#9aa0aa"/>
+  <ellipse cx="80" cy="40" rx="38" ry="8" fill="${colour}" opacity="0.55"/>
+  <rect x="28" y="78" width="104" height="52" fill="#ffffff" opacity="0.95"/>
+  <rect x="28" y="78" width="104" height="5" fill="${colour}"/>
+  <text x="80" y="100" text-anchor="middle" class="tin-label">${label}</text>
+  ${sub ? `<text x="80" y="118" text-anchor="middle" class="tin-sub">${sub}</text>` : ""}
+  <rect x="28" y="126" width="104" height="4" fill="${colour}" opacity="0.7"/>
+  <ellipse cx="80" cy="162" rx="52" ry="9" fill="#c9ccd3" opacity="0.5"/>
+</svg>`;
+  }
+
+  /* ---------- product card ------------------------------------------------ */
+  function productCard(product, colour) {
+    const from = fromPrice(product, colour);
+    const sizes = product.packs.map(p => `${p.litres}L`).join(" · ");
+    const href = `product.html?p=${product.id}${colour ? `&colour=${colour.code}` : ""}`;
+    return `
+<a class="product-card" href="${href}">
+  <div class="product-art">
+    ${tinSvg(colour ? colour.hex : null, { label: product.range, sub: product.sheens[0] })}
+    ${product.hazard ? `<span class="badge badge-warn art-flag">${product.hazard}</span>` : ""}
+  </div>
+  <div class="product-body">
+    <span class="product-brand">${product.brand} &middot; ${product.category}</span>
+    <h3>${product.name}</h3>
+    <p class="product-blurb">${product.blurb}</p>
+    <div class="product-meta">
+      <span>&#9733; ${product.rating} <span class="muted">(${product.reviews})</span></span>
+      <span class="muted">${product.coveragePerLitre} m&sup2;/L</span>
+    </div>
+    <div class="product-sizes muted">${sizes}</div>
+    <div class="product-price">
+      <strong>from ${zar(from)}</strong>
+      <span class="muted xs">incl. VAT${colour ? ` &middot; in ${colour.name}` : ""}</span>
+    </div>
+  </div>
+</a>`;
+  }
+
   /* ---------- cart -------------------------------------------------------- */
   const CART_KEY = "jt.paints.cart.v1";
 
@@ -115,35 +180,57 @@
   function cartCount() { return readCart().reduce((n, l) => n + l.qty, 0); }
 
   /* ---------- chrome ------------------------------------------------------ */
+  /* Just Paints is its own storefront with its own identity. Just Things is
+     the parent marketplace, present as a way back up, not as a prefix. */
+  const NAV = [
+    ["index.html", "Home"],
+    ["products.html", "All paint"],
+    ["products.html?category=Interior+walls", "Interior"],
+    ["products.html?category=Exterior+walls", "Exterior"],
+    ["products.html?category=Roof", "Roof"],
+    ["products.html?category=Wood+care", "Wood care"],
+    ["products.html?category=Enamel+%26+metal", "Enamel & metal"],
+    ["colours.html", "Colours"],
+  ];
+
+  const ROLLER_TILE = `
+<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+  <rect width="48" height="48" rx="3" fill="var(--jt-gold-400)"/>
+  <g fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="9" y="11" width="22" height="9" rx="2" transform="rotate(-18 20 15.5)"/>
+    <path d="M30 23 l4 4 -7 6"/>
+    <path d="M25 35 l-3 3"/>
+  </g>
+</svg>`;
+
   function header(active) {
-    const nav = [
-      ["index.html", "Home"],
-      ["colours.html", "Colours"],
-      ["product.html", "Interior"],
-      ["product.html?p=professional-exterior", "Exterior"],
-      ["product.html?p=architect-roofmaster", "Roof"],
-      ["product.html?p=durawood-sealer", "Wood care"],
-      ["product.html?p=crest-enamel", "Enamel & metal"]
-    ];
     return `
 <div class="proto-note">
-  Prototype &middot; colour names, codes and hex are Stevensons' published Real Colours.
+  Prototype &middot; colour names, codes and hex are Stevensons&rsquo; published Real Colours.
   <strong>Prices, stock and delivery are illustrative.</strong>
 </div>
 <div class="utility"><div class="wrap">
+  <a class="parent-link" href="#" title="Just Things marketplace">
+    <svg viewBox="0 0 30 12" aria-hidden="true" focusable="false">
+      <rect x="0"  width="8" height="12" rx="1" fill="var(--jt-gold-400)"/>
+      <rect x="11" width="8" height="12" rx="1" fill="var(--jt-azure-400)"/>
+      <rect x="22" width="8" height="12" rx="1" fill="var(--jt-gold-400)"/>
+    </svg>
+    Just Things
+  </a>
+  <span class="utility-divider" aria-hidden="true"></span>
   <span>Deliver to <strong>2196</strong></span>
   <span class="promo">
     <span>Tinted to order in 24 hours</span>
     <span>Free delivery over R1 500</span>
-    <span>Trade accounts welcome</span>
   </span>
   <span class="spacer"></span>
-  <a href="#">Help</a><a href="#">Track order</a><a href="#">Sell on Just Things</a>
+  <a href="#">Help</a><a href="#">Track order</a><a href="#">Trade accounts</a>
 </div></div>
 <header class="masthead"><div class="wrap">
-  <a class="brand" href="index.html">
-    <img src="assets/logo.png" alt="Just Things">
-    <span class="vertical">Paints</span>
+  <a class="brand" href="index.html" aria-label="Just Paints home">
+    <span class="brand-tile">${ROLLER_TILE}</span>
+    <span class="brand-word"><span>just</span><span>paints</span></span>
   </a>
   <form class="searchbar" role="search" onsubmit="return false;">
     <input type="search" placeholder="Search paint, colour name or RC code&hellip;" aria-label="Search">
@@ -159,7 +246,7 @@
   </div>
 </div></header>
 <nav class="mainnav"><div class="wrap">
-  ${nav.map(([h, l]) => `<a href="${h}"${l === active ? ' aria-current="page"' : ""}>${l}</a>`).join("")}
+  ${NAV.map(([h, l]) => `<a href="${h}"${l === active ? ' aria-current="page"' : ""}>${l}</a>`).join("")}
 </div></nav>`;
   }
 
@@ -168,10 +255,10 @@
 <footer class="site"><div class="wrap">
   <div class="cols">
     <div>
-      <h4>Just Paints</h4>
+      <h4>Shop</h4>
+      <a href="products.html">All paint</a>
       <a href="colours.html">Browse colours</a>
-      <a href="#">Coverage calculator</a>
-      <a href="#">Order sample pots</a>
+      <a href="#">Sample pots</a>
       <a href="#">Trade accounts</a>
     </div>
     <div>
@@ -183,15 +270,18 @@
     </div>
     <div>
       <h4>About</h4>
-      <a href="#">About Just Things</a>
+      <a href="#">About Just Paints</a>
       <a href="#">Our manufacturers</a>
-      <a href="#">Sell on Just Things</a>
+      <a href="#">Painting guides</a>
     </div>
     <div>
-      <h4>Legal</h4>
-      <a href="#">Terms &amp; conditions</a>
-      <a href="#">Privacy &amp; POPIA</a>
-      <a href="#">Consumer rights</a>
+      <h4>Just Things</h4>
+      <p class="xs" style="color:#aeb6d4;margin:0 0 var(--jt-space-2)">
+        Just Paints is part of Just Things, the marketplace for tools, hardware
+        and home improvement.
+      </p>
+      <a href="#">Visit Just Things &rarr;</a>
+      <a href="#">Sell on Just Things</a>
     </div>
   </div>
   <div class="legal">
@@ -291,6 +381,7 @@
   /* ---------- helpers ----------------------------------------------------- */
   const products = () => window.JT_PRODUCTS;
   const productById = (id) => window.JT_PRODUCTS.find(p => p.id === id);
+  const categories = () => [...new Set(window.JT_PRODUCTS.map(p => p.category))];
   const colours = () => window.JT_COLOURS;
   const colourByCode = (c) => window.JT_COLOURS.find(x => x.code === c);
   const param = (k) => new URLSearchParams(location.search).get(k);
@@ -302,8 +393,10 @@
   }
 
   window.JT = {
-    zar, money, round2, resolvePrice, litresNeeded, bestPackCombination,
+    zar, round2, resolvePrice, fromPrice, litresNeeded, bestPackCombination,
+    tinSvg, productCard,
     readCart, addToCart, removeLine, openCart, closeCart, renderCart, mount,
-    products, productById, colours, colourByCode, param, contrastOn, VAT, BASES
+    products, productById, categories, colours, colourByCode, param, contrastOn,
+    VAT, BASES
   };
 })();

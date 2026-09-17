@@ -18,7 +18,7 @@
 <main class="wrap">
   <p class="small muted" style="margin-top:var(--jt-space-5)">
     <a href="index.html">Just Paints</a> &rsaquo;
-    <a href="colours.html">Colours</a> &rsaquo;
+    <a href="products.html">Paint</a> &rsaquo;
     <span id="crumb"></span>
   </p>
 
@@ -26,15 +26,7 @@
     <!-- Left: preview -->
     <div class="stack">
       <div class="tin">
-        <div class="preview" id="preview">
-          <div class="can">
-            <div class="lid" id="can-lid"></div>
-            <div class="face">
-              <b id="can-name">&nbsp;</b>
-              <span id="can-meta">&nbsp;</span>
-            </div>
-          </div>
-        </div>
+        <div class="preview" id="preview"></div>
         <div class="caption">
           <div class="row" style="justify-content:space-between">
             <span class="xs muted" id="cap-colour"></span>
@@ -158,7 +150,7 @@
 <script src="data/catalogue.js"></script>
 <script src="js/app.js"></script>
 <script>
-JT.mount("Interior");
+JT.mount("All paint");
 
 const product = JT.productById(JT.param("p")) || JT.products()[0];
 const state = {
@@ -206,11 +198,12 @@ function renderOptions() {
 function renderPreview() {
   const c = state.colour;
   const hex = c ? c.hex : "#f2f2f0";
-  document.getElementById("preview").style.background = hex;
-  document.getElementById("can-lid").style.background = hex;
-  document.getElementById("can-name").textContent = c ? c.name : "Factory white";
-  document.getElementById("can-meta").textContent =
-    `${product.name} · ${state.sheen} · ${state.pack.litres}L`;
+  const preview = document.getElementById("preview");
+  preview.style.background = hex;
+  preview.innerHTML = JT.tinSvg(c ? c.hex : null, {
+    label: product.range.toLowerCase(),
+    sub: `${state.sheen} · ${state.pack.litres}L`,
+  });
   document.getElementById("cap-colour").textContent =
     c ? `${c.code} · ${c.hex.toUpperCase()} · ${c.family}` : "No tint — factory white base";
   document.getElementById("cap-lrv").textContent = c ? `LRV ${c.lrv}` : "";

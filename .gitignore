@@ -1,0 +1,38 @@
+# Build output
+bin/
+obj/
+dist/
+build/
+out/
+.next/
+
+# Dependencies
+node_modules/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+*.pfx
+appsettings.Development.json
+appsettings.Local.json
+
+# IDE
+.vs/
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.user
+*.suo
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local tooling
+.claude/settings.local.json

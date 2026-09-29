@@ -169,7 +169,7 @@ document.getElementById("rating").innerHTML =
   `&#9733; ${product.rating} <span class="muted">(${product.reviews} reviews)</span>`;
 if (product.hazard) {
   document.getElementById("stock").insertAdjacentHTML("afterend",
-    `<span class="badge badge-warn">${product.hazard} &mdash; courier restrictions apply</span>`);
+    `<span class="badge badge-warn">${product.hazard} - courier restrictions apply</span>`);
 }
 
 /* ---------- options ---------- */
@@ -235,7 +235,7 @@ function renderPrice() {
 
   const tinted = !!state.colour;
   document.getElementById("returns").innerHTML = tinted
-    ? `<span class="badge badge-warn">Mixed to order &mdash; cannot be returned</span>
+    ? `<span class="badge badge-warn">Mixed to order - cannot be returned</span>
        <p class="xs muted" style="margin:var(--jt-space-2) 0 0">
          Tinted paint is made to your specification, so the 7-day cooling-off right
          does not apply. It remains returnable if it does not match what you ordered.</p>`
@@ -263,7 +263,7 @@ function renderCalc() {
     </p>
     <p style="margin:0 0 var(--jt-space-3)">Cheapest combination:</p>
     <ul style="margin:0 0 var(--jt-space-3);padding-left:1.1rem">
-      ${best.lines.map(l => `<li>${l.qty} &times; ${l.pack.litres}L &mdash; ${JT.zar(l.each * l.qty)}</li>`).join("")}
+      ${best.lines.map(l => `<li>${l.qty} &times; ${l.pack.litres}L - ${JT.zar(l.each * l.qty)}</li>`).join("")}
     </ul>
     <div class="row" style="justify-content:space-between">
       <span><strong>${JT.zar(best.cost)}</strong>

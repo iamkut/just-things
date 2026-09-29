@@ -288,7 +288,7 @@
     Prices include VAT at 15%. Custom-tinted paint is mixed to order and cannot be
     returned under the ECTA cooling-off right, except where it does not match the
     specification ordered.
-    <br>Prototype &mdash; not a live store.
+    <br>Prototype - not a live store.
   </div>
 </div></footer>`;
   }
@@ -342,7 +342,7 @@
           <strong class="small">${l.name}</strong>
           <div class="xs muted">${l.sheen} &middot; ${l.litres}L${l.colourCode ? ` &middot; ${l.colourName} ${l.colourCode}` : " &middot; Factory white"}</div>
           ${l.madeToOrder
-            ? `<span class="badge badge-warn" style="margin-top:4px">Mixed to order &mdash; non-returnable</span>`
+            ? `<span class="badge badge-warn" style="margin-top:4px">Mixed to order - non-returnable</span>`
             : `<span class="badge badge-ok" style="margin-top:4px">Returnable within 7 days</span>`}
           <div class="xs muted" style="margin-top:4px">${l.tintBaseLabel}</div>
         </div>

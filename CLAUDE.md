@@ -1,4 +1,4 @@
-# Just Things — working notes
+# Just Things - working notes
 
 South African marketplace for tools, hardware and home improvement. Launching
 through one vertical: **Just Paints** at `paints.justthings.co.za`, anchored by
@@ -6,8 +6,8 @@ Stevensons on a dropship arrangement (terms unconfirmed).
 
 ## Read first
 
-- `docs/data-model.md` — the catalogue, colour and pricing model
-- `docs/decisions/` — ADRs; 0002 is the one everything else depends on
+- `docs/data-model.md` - the catalogue, colour and pricing model
+- `docs/decisions/` - ADRs; 0002 is the one everything else depends on
 
 ## The rule that governs the codebase
 
@@ -28,10 +28,10 @@ Consequences that bite if forgotten:
 ## Conventions
 
 - Money is `decimal`, never float. Store ex-VAT, display inc-VAT (15%).
-- ZAR only. Format as `R 1 234,56` — space thousands, comma decimal.
+- ZAR only. Format as `R 1 234,56` - space thousands, comma decimal.
 - South African English: colour, litre, organisation.
 - `Offer` (seller x variant) is first-class even with one seller. Do not collapse
-  it into `ProductVariant` — see ADR-0004.
+  it into `ProductVariant` - see ADR-0004.
 
 ## Brand
 
@@ -51,11 +51,11 @@ facing pages. Dark tokens exist for admin surfaces.
 
 ## Prototype
 
-`prototype/` is a static clickable storefront — no build step, no framework.
+`prototype/` is a static clickable storefront - no build step, no framework.
 Pages: `index.html`, `products.html` (listing, filters, colour preview),
 `product.html` (configurator), `colours.html`.
 
-Run it with the no-cache dev server — the stock `http.server` lets browsers
+Run it with the no-cache dev server - the stock `http.server` lets browsers
 cache JS and CSS, so edits silently do not appear:
 
 ```bash
@@ -68,20 +68,20 @@ whatever colour is selected.
 
 Colour data in `prototype/data/colours.js` is real: 180 names, RC codes and hex
 captured from the rendered swatches on stevensons.co.za. `lrv` is derived from
-hex; `family` and `tintBase` are **derived heuristics for the prototype only** —
+hex; `family` and `tintBase` are **derived heuristics for the prototype only** -
 real base assignment must come from Stevensons' tinting system.
 
 `prototype/css/tokens.css` is a **copy** of `brand/tokens.css`, kept so the
 prototype folder stays self-contained and zippable for a partner. `brand/` is the
-source of truth — if you change tokens, copy the file across.
+source of truth - if you change tokens, copy the file across.
 
-Everything in `prototype/data/catalogue.js` — products, prices, pack sizes,
-weights — is invented and clearly flagged in-page. Do not quote those prices to
+Everything in `prototype/data/catalogue.js` - products, prices, pack sizes,
+weights - is invented and clearly flagged in-page. Do not quote those prices to
 anyone.
 
 ## Backend
 
-`backend/` — .NET 10, Clean Architecture, PostgreSQL with snake_case naming.
+`backend/` - .NET 10, Clean Architecture, PostgreSQL with snake_case naming.
 See `backend/README.md` to run it.
 
 The two pieces that carry the product are pure and must stay that way:

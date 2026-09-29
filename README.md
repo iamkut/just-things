@@ -20,7 +20,7 @@ and one seller.
 | --- | --- |
 | `brand/` | Corporate identity: logo, palette, approved mockups |
 | `docs/` | Architecture, data model and decision records |
-| `docs/decisions/` | ADRs — the reasoning behind irreversible choices |
+| `docs/decisions/` | ADRs - the reasoning behind irreversible choices |
 | `prototype/` | Clickable Just Paints storefront prototype (static, no build step) |
 | `tools/` | Dev helpers, e.g. the no-cache static server |
 | `backend/` | Commerce core: .NET 10, Clean Architecture, PostgreSQL |

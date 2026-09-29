@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="color-scheme" content="light">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Product — Just Paints</title>
+<title>Product - Just Paints</title>
 <meta name="description" content="Choose a colour, sheen and pack size. Price resolves from the tint base.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -205,7 +205,7 @@ function renderPreview() {
     sub: `${state.sheen} · ${state.pack.litres}L`,
   });
   document.getElementById("cap-colour").textContent =
-    c ? `${c.code} · ${c.hex.toUpperCase()} · ${c.family}` : "No tint — factory white base";
+    c ? `${c.code} · ${c.hex.toUpperCase()} · ${c.family}` : "No tint - factory white base";
   document.getElementById("cap-lrv").textContent = c ? `LRV ${c.lrv}` : "";
 
   document.getElementById("picker-sw").style.background = hex;
@@ -301,7 +301,7 @@ document.getElementById("add-sample").addEventListener("click", () => {
   const p = JT.resolvePrice(product, s, state.sheen, state.colour);
   JT.addToCart({
     productId: product.id + "-sample",
-    name: product.name + " — sample pot",
+    name: product.name + " - sample pot",
     sheen: state.sheen, litres: s.litres, weightKg: s.weightKg, qty: 1,
     colourCode: state.colour ? state.colour.code : null,
     colourName: state.colour ? state.colour.name : null,

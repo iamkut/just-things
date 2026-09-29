@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Just Things — design tokens
+   Just Things - design tokens
    Brand colours are authoritative (brand/palette.png).
    Neutrals and semantics are sampled from the approved homepage mockup
    (brand/mockups/homepage-desktop.png).
@@ -13,7 +13,7 @@
   --jt-blue-300: #838bb9;
   --jt-blue-400: #5a64a2;
   --jt-blue-500: #3a4280;
-  --jt-blue-600: #23255a;  /* Prussian Blue — primary */
+  --jt-blue-600: #23255a;  /* Prussian Blue - primary */
   --jt-blue-700: #1e2050;
   --jt-blue-800: #191b41;
   --jt-blue-900: #101128;
@@ -23,7 +23,7 @@
   --jt-gold-100: #fbe0c0;
   --jt-gold-200: #f7c286;
   --jt-gold-300: #f3ad54;
-  --jt-gold-400: #eb9822;  /* Sunset Gold — accent, CTAs */
+  --jt-gold-400: #eb9822;  /* Sunset Gold - accent, CTAs */
   --jt-gold-500: #d4821a;
   --jt-gold-600: #ae6a15;
   --jt-gold-700: #855010;
@@ -34,7 +34,7 @@
   --jt-azure-100: #cfe3f4;
   --jt-azure-200: #9fc6e8;
   --jt-azure-300: #6fa9dd;
-  --jt-azure-400: #3986c7;  /* Azure Blue — secondary, links */
+  --jt-azure-400: #3986c7;  /* Azure Blue - secondary, links */
   --jt-azure-500: #2e6ca0;
   --jt-azure-600: #235379;
   --jt-azure-700: #183952;
@@ -60,7 +60,7 @@
   --jt-info:    var(--jt-azure-400);
   --jt-star:    #fdb416;  /* rating stars */
 
-  /* --- Surfaces (semantic aliases — prefer these in components) ---------- */
+  /* --- Surfaces (semantic aliases - prefer these in components) ---------- */
   --jt-bg:            var(--jt-n-50);
   --jt-surface:       var(--jt-n-0);
   --jt-surface-sunk:  var(--jt-n-100);

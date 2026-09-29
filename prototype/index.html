@@ -99,7 +99,7 @@
 <script>
 JT.mount("Home");
 
-// Hero swatch mosaic — a spread across the collection.
+// Hero swatch mosaic - a spread across the collection.
 (function () {
   const cs = JT.colours();
   const picks = [];
@@ -126,14 +126,14 @@ JT.mount("Home");
   }).join("");
 })();
 
-// Featured products — real product cards.
+// Featured products - real product cards.
 (function () {
   const featured = [...JT.products()].sort((a, b) => b.reviews - a.reviews).slice(0, 4);
   document.getElementById("featured").innerHTML =
     featured.map(p => JT.productCard(p, null)).join("");
 })();
 
-// Popular colours — these link into the catalogue filtered to that colour.
+// Popular colours - these link into the catalogue filtered to that colour.
 (function () {
   const wanted = ["RC53", "RC120", "RC172", "RC150"];
   const cs = wanted.map(JT.colourByCode).filter(Boolean);

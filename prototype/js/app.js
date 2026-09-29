@@ -1,4 +1,4 @@
-/* Just Paints prototype — shared chrome, price resolver, coverage maths, cart.
+/* Just Paints prototype - shared chrome, price resolver, coverage maths, cart.
    Everything here is illustrative. The price resolver mirrors the real rule
    documented in docs/data-model.md: price is RESOLVED, never stored. */
 
@@ -327,7 +327,7 @@
     if (total) total.textContent = zar(subtotal);
     document.getElementById("cart-subtotal").textContent = zar(subtotal);
     document.getElementById("cart-weight").textContent = weight
-      ? `Basket weight ${round2(weight)} kg — courier rated on weight, not a flat fee.`
+      ? `Basket weight ${round2(weight)} kg - courier rated on weight, not a flat fee.`
       : "";
 
     if (!lines.length) {

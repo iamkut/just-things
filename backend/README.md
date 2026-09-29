@@ -1,4 +1,4 @@
-# Just Things — commerce core
+# Just Things - commerce core
 
 .NET 10, Clean Architecture. See `../docs/architecture.md` for the shape and
 `../docs/decisions/` for why.
@@ -15,7 +15,7 @@
 
 ## The two pieces that matter
 
-**`Domain/Pricing/PriceResolver.cs`** — price is resolved at runtime, never read
+**`Domain/Pricing/PriceResolver.cs`** - price is resolved at runtime, never read
 off a row, because the tint base is only known once a colour is chosen:
 
 ```
@@ -26,7 +26,7 @@ then adjusted for the customer tier, VAT applied last, **rounded exactly once**.
 `TotalIncVat` is authoritative; `VatAmount` is derived from it so an invoice line
 plus its VAT always equals what the customer pays.
 
-**`Domain/Coverage/CoverageCalculator.cs`** — turns square metres into the
+**`Domain/Coverage/CoverageCalculator.cs`** - turns square metres into the
 cheapest combination of pack sizes, breaking cost ties towards the smaller
 surplus so nobody is sold a spare 20L tin.
 
@@ -72,13 +72,13 @@ dotnet ef migrations add <Name> --project src/Infrastructure --startup-project s
 | `POST /api/products/{slug}/coverage` | Turn an area into the cheapest basket |
 
 A colour a product cannot be tinted to returns 404 rather than silently pricing
-as factory white — there is genuinely no price to show.
+as factory white - there is genuinely no price to show.
 
 ## Seed data caveat
 
 Colour names, codes and hex are Stevensons' own published Real Colours. LRV is
 derived from hex. **Hue family and tint-base assignment are derived heuristics**
-standing in until Stevensons supplies the real base mapping — that mapping is the
+standing in until Stevensons supplies the real base mapping - that mapping is the
 open Phase 0 ask, and without it no tinted line can be priced correctly.
 
 **Product prices, pack sizes and weights are invented placeholders.** Do not

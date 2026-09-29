@@ -21,7 +21,7 @@ Shopify Plus is eliminated. It raised the variant ceiling to 2,048 in October
 2025 but still permits only 3 options per product, and Liquid caps
 `product.variants` at 250. Paint needs colour, base, sheen and pack size, and
 Shopify cannot price a line item from a runtime rule without dropping to draft
-orders — which breaks the storefront checkout.
+orders - which breaks the storefront checkout.
 
 Medusa v2 was the considered alternative and was not taken.
 
@@ -32,7 +32,7 @@ Medusa v2 was the considered alternative and was not taken.
 - Cart, checkout, orders, tax and returns are ours to build and maintain
 
 **Gaining:**
-- The differentiating code — colour, tinting, pricing, coverage — is first-class
+- The differentiating code - colour, tinting, pricing, coverage - is first-class
   rather than fighting a framework's grain
 - No second runtime to host, patch and upgrade; the team already runs .NET 10
   Clean Architecture on other projects

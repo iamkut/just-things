@@ -1,6 +1,6 @@
 # Architecture
 
-Status: **accepted**. The commerce platform decision was taken on 2026-09-17 —
+Status: **accepted**. The commerce platform decision was taken on 2026-09-17 -
 custom .NET 10 core, see `decisions/0001-commerce-platform.md`. The backend lives
 in `backend/`.
 
@@ -32,7 +32,7 @@ flowchart TB
 ```
 
 Verticals are data, not deployments. A new vertical is a `Vertical` row, a
-theme, a category tree and a DNS record — not a fork.
+theme, a category tree and a DNS record - not a fork.
 
 ## Backend
 
@@ -50,7 +50,7 @@ business-directory API (.NET 10, `Domain` / `Application` / `Infrastructure` /
 ### Bounded contexts
 
 Modules inside one deployable, with enforced boundaries. A modular monolith
-until traffic justifies otherwise — splitting later is cheaper than distributed
+until traffic justifies otherwise - splitting later is cheaper than distributed
 transactions now.
 
 | Context | Owns |
@@ -75,7 +75,7 @@ that ground to Leroy Merlin and Takealot.
 
 | Concern | Approach |
 | --- | --- |
-| Product pages | ISR — regenerate on catalogue change, serve static otherwise |
+| Product pages | ISR - regenerate on catalogue change, serve static otherwise |
 | Colour browser | Static payload, client-side filtering; 180 colours is small |
 | Price display | Server-resolved; never compute price in the browser |
 | Multi-vertical | One app, vertical resolved from hostname, theme from tokens |

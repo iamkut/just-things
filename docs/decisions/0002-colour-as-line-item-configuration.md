@@ -7,7 +7,7 @@
 
 A tin of paint is identified by `colour x base x sheen x pack size`. Treating
 all four as variant axes produces roughly 2,160 variants for a single topcoat
-range and about 10,800 across the five Stevensons ranges — against a few dozen
+range and about 10,800 across the five Stevensons ranges - against a few dozen
 physically stocked items.
 
 Every commerce platform stores variants as rows. Ten thousand mostly-fictional
@@ -21,7 +21,7 @@ size. Roughly 12 variants per range.
 **Colour is captured on the cart and order line** as a `LineConfiguration`,
 alongside the tint base it resolves to.
 
-A `ColourAvailability` join — `(productId, colourId) -> tintBaseId` — answers
+A `ColourAvailability` join - `(productId, colourId) -> tintBaseId` - answers
 both "can this be tinted to this colour" and "which base does it use".
 
 ## Consequences

@@ -43,7 +43,7 @@ It is the join that makes runtime pricing possible. For a given
 1. **Can this product be tinted to this colour at all?** Not every range
    supports every colour.
 2. **Which tint base does it resolve to?** White, Pastel, Medium, Deep or
-   Accent — and the base is what drives the price uplift.
+   Accent - and the base is what drives the price uplift.
 
 Without this table, price cannot be computed and the storefront cannot show a
 number.
@@ -68,7 +68,7 @@ number.
 | `Offer` | `sellerId`, `variantId`, `priceExVat`, `stockQty`, `leadTimeDays`, `fulfilmentMode` |
 
 `Offer` exists from day one even though there is only one seller. Adding it
-later means rewriting pricing, cart, orders and payouts simultaneously — it is
+later means rewriting pricing, cart, orders and payouts simultaneously - it is
 the one piece of Phase 3 that cannot be deferred.
 
 ### Colour
@@ -87,7 +87,7 @@ image; a colour without `lrv` hides the light-reflectance filter. The catalogue
 must work before the data is perfect.
 
 `TintRecipe` may be proprietary and may never be shared. The platform does not
-need it to sell — only to print on a dispensing docket. Keep it optional and
+need it to sell - only to print on a dispensing docket. Keep it optional and
 opaque.
 
 ## Pricing
@@ -131,7 +131,7 @@ The paint-specific payload on a cart or order line:
 
 | Field | Why |
 | --- | --- |
-| `colourId`, `colourCode`, `colourName`, `colourHex` | Snapshotted — the colour record may be edited or discontinued later |
+| `colourId`, `colourCode`, `colourName`, `colourHex` | Snapshotted - the colour record may be edited or discontinued later |
 | `tintBaseId`, `tintBaseName` | Determines price and the dispensing docket |
 | `isMadeToOrder` | True whenever a tint is applied; false for factory white |
 | `resolvedPriceExVat` | What the customer was actually shown |
@@ -150,11 +150,11 @@ Computed **once, at order placement**, and stored on the line:
 
 Defect rights are deliberately **not** a third enum value. Goods that do not
 conform to the specification ordered come back however they were made, so that is
-an invariant of the policy rather than a state a line can be in —
+an invariant of the policy rather than a state a line can be in -
 `ReturnabilityPolicy.AllowsDefectReturn` returns true unconditionally and no line
 may opt out.
 
-Never recompute this from current rules — the rule that applied is the rule at
+Never recompute this from current rules - the rule that applied is the rule at
 the time of sale. Disclose it at add-to-cart, not in terms and conditions.
 
 ## Fulfilment
@@ -162,7 +162,7 @@ the time of sale. Disclose it at add-to-cart, not in terms and conditions.
 | Concern | Model |
 | --- | --- |
 | Split shipments | One `Shipment` per seller per order, from day one |
-| Shipping cost | Computed from `weightKg` and `dimsMm`, never flat-rate — a 20L tin is ~25kg |
+| Shipping cost | Computed from `weightKg` and `dimsMm`, never flat-rate - a 20L tin is ~25kg |
 | Hazard | `hazardClass` on the variant; solvent-based is flammable and restricts couriers |
 | Lead time | `Offer.leadTimeDays` plus tint-to-dispatch SLA for made-to-order lines |
 

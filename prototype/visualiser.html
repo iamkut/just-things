@@ -79,6 +79,21 @@
     font-size: 11px; color: var(--jt-ink-dim);
     margin-top: var(--jt-space-3); line-height: 1.5;
   }
+
+  .vis-status {
+    position: absolute; left: 50%; bottom: 14px;
+    transform: translateX(-50%);
+    background: rgb(14 16 22 / .82); color: #fff;
+    padding: 7px 14px; border-radius: 999px;
+    font-size: 13px; font-weight: 500;
+    pointer-events: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    max-width: calc(100% - 24px);
+  }
+  .vis-status .vs-swatch {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 1px solid rgb(255 255 255 / .35);
+  }
 </style>
 </head>
 <body>
@@ -87,10 +102,10 @@
 <main class="wrap">
   <div class="section-head" style="margin-top:var(--jt-space-8)">
     <div>
-      <h1>See it on your wall</h1>
-      <p>Upload a photo of your room, brush over the wall, and try a colour. The
-         preview preserves the wall's own shadows and light - a solid tint
-         would look fake.</p>
+      <h1>See it on your surface</h1>
+      <p>Upload a photo of a room. Tap any surface - wall, floor, ceiling,
+         skirting - to select it, then pick a Real Colour. The preview
+         preserves the surface's own shadows and light.</p>
     </div>
   </div>
 
@@ -99,6 +114,7 @@
       <div class="vis-stage" id="stage">
         <canvas id="cv-image" aria-label="Room photo"></canvas>
         <canvas id="cv-mask" aria-label="Painted surface overlay"></canvas>
+        <div class="vis-status" id="status" hidden></div>
         <div class="vis-prompt" id="prompt">
           <div>
             <p><strong>Upload a photo of a wall</strong></p>
@@ -119,8 +135,8 @@
           <span id="brush-size-val">48</span>
         </label>
         <label class="vis-brushsize" id="tol-ctrl">
-          Tolerance <input type="range" id="tolerance" min="4" max="80" value="26">
-          <span id="tolerance-val">26</span>
+          Tolerance <input type="range" id="tolerance" min="4" max="100" value="42">
+          <span id="tolerance-val">42</span>
         </label>
         <span style="flex:1"></span>
         <button class="vis-tool ghost" type="button" id="t-clear">Clear mask</button>
@@ -129,9 +145,10 @@
       </div>
 
       <p class="vis-caveat" id="caveat" hidden>
-        Tap a wall with the magic wand, or brush over it manually. The preview
-        preserves the wall's own shadows and light - but screen colours are a
-        guide. Order a sample pot before you commit.
+        Tap a surface with the magic wand to select it, or brush manually.
+        If the wand grabs too little, raise the tolerance; if it bleeds into
+        other surfaces, lower it or use the eraser to tidy. Screen colours are
+        a guide - order a sample pot before you commit.
       </p>
     </section>
 
@@ -186,9 +203,10 @@ let srcLuma = null;                // Float32Array of per-pixel luminance (0..1)
 let imgW = 0, imgH = 0;
 let tool = "wand";
 let brushSize = 48;
-let tolerance = 26;
+let tolerance = 42;
 let drawing = false;
 let selectedColour = null;
+let hasMask = false;
 
 // Alpha value the mask uses for a brush stamp / flood fill. 108/255 ≈ 0.42,
 // matching the brush fillStyle so the two tools look identical in the overlay.
@@ -250,6 +268,27 @@ function selectColour(c) {
   document.querySelectorAll("[data-code]").forEach(el =>
     el.setAttribute("aria-pressed", el.dataset.code === c.code));
   recolour();
+  renderStatus();
+}
+
+/* Status pill guides the user through the two-step flow: select a surface,
+   then pick a colour. Both ordering paths are supported (either can come
+   first) - the pill just reflects what's still missing. */
+function renderStatus() {
+  const el = document.getElementById("status");
+  if (!srcData) { el.hidden = true; return; }
+  el.hidden = false;
+  if (!hasMask && !selectedColour) {
+    el.innerHTML = "Step 1 - tap a wall, floor or ceiling to select it";
+  } else if (!hasMask) {
+    el.innerHTML = `<span class="vs-swatch" style="background:${selectedColour.hex}"></span>` +
+                   `Tap a surface to paint it in ${selectedColour.name}`;
+  } else if (!selectedColour) {
+    el.innerHTML = "Step 2 - pick a colour from the panel";
+  } else {
+    el.innerHTML = `<span class="vs-swatch" style="background:${selectedColour.hex}"></span>` +
+                   `Painted in ${selectedColour.name} - tap another surface or pick a new colour`;
+  }
 }
 
 document.getElementById("q").addEventListener("input", e => {
@@ -293,6 +332,8 @@ function loadImage(src) {
     document.getElementById("toolbar").hidden = false;
     document.getElementById("caveat").hidden = false;
     document.getElementById("t-download").disabled = false;
+    hasMask = false;
+    renderStatus();
   };
   img.onerror = () => alert("Couldn't load that image. Try a JPEG or PNG.");
   img.src = src;
@@ -353,6 +394,7 @@ function paintAt(x, y) {
     // is what the recolour pass actually reads as the mask.
     ctxMask.fillStyle = "rgba(235, 152, 34, 0.42)";
     ctxMask.beginPath(); ctxMask.arc(x, y, r, 0, Math.PI * 2); ctxMask.fill();
+    hasMask = true;
   }
 }
 function strokeTo(e) {
@@ -366,6 +408,8 @@ cvMask.addEventListener("pointerdown", e => {
   if (tool === "wand") {
     const p = pointerPos(e);
     floodFill(Math.round(p.x), Math.round(p.y));
+    hasMask = true;
+    renderStatus();
     if (selectedColour) recolour();
     return;
   }
@@ -377,6 +421,7 @@ cvMask.addEventListener("pointermove", strokeTo);
 cvMask.addEventListener("pointerup", () => {
   drawing = false;
   if (selectedColour) recolour(); // final full pass
+  renderStatus();
 });
 cvMask.addEventListener("pointercancel", () => { drawing = false; });
 
@@ -506,6 +551,8 @@ document.getElementById("t-eraser").addEventListener("click", () => setTool("era
 document.getElementById("t-clear").addEventListener("click", () => {
   ctxMask.clearRect(0, 0, imgW, imgH);
   if (srcData) ctxImg.putImageData(new ImageData(new Uint8ClampedArray(srcData), imgW, imgH), 0, 0);
+  hasMask = false;
+  renderStatus();
 });
 document.getElementById("brush-size").addEventListener("input", e => {
   brushSize = +e.target.value;
@@ -515,6 +562,7 @@ document.getElementById("tolerance").addEventListener("input", e => {
   tolerance = +e.target.value;
   document.getElementById("tolerance-val").textContent = tolerance;
 });
+document.getElementById("tolerance-val").textContent = tolerance;
 document.getElementById("t-download").addEventListener("click", () => {
   if (!srcData) return;
   const link = document.createElement("a");

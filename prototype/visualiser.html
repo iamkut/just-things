@@ -111,11 +111,16 @@
       </div>
 
       <div class="vis-toolbar" id="toolbar" hidden>
-        <button class="vis-tool" type="button" id="t-brush" aria-pressed="true">Brush</button>
+        <button class="vis-tool" type="button" id="t-wand" aria-pressed="true" title="Tap a wall to flood-fill similar pixels">Magic wand</button>
+        <button class="vis-tool" type="button" id="t-brush" aria-pressed="false">Brush</button>
         <button class="vis-tool" type="button" id="t-eraser" aria-pressed="false">Eraser</button>
-        <label class="vis-brushsize">
+        <label class="vis-brushsize" id="size-ctrl" hidden>
           Size <input type="range" id="brush-size" min="8" max="140" value="48">
           <span id="brush-size-val">48</span>
+        </label>
+        <label class="vis-brushsize" id="tol-ctrl">
+          Tolerance <input type="range" id="tolerance" min="4" max="80" value="26">
+          <span id="tolerance-val">26</span>
         </label>
         <span style="flex:1"></span>
         <button class="vis-tool ghost" type="button" id="t-clear">Clear mask</button>
@@ -124,9 +129,9 @@
       </div>
 
       <p class="vis-caveat" id="caveat" hidden>
-        Brush over the wall surface. The preview preserves the wall's own
-        shadows and light - but screen colours are a guide. Order a sample pot
-        before you commit.
+        Tap a wall with the magic wand, or brush over it manually. The preview
+        preserves the wall's own shadows and light - but screen colours are a
+        guide. Order a sample pot before you commit.
       </p>
     </section>
 
@@ -179,10 +184,15 @@ let srcCanvas = null;              // original pixels, never redrawn by brush
 let srcData = null;                // Uint8ClampedArray cache of srcCanvas
 let srcLuma = null;                // Float32Array of per-pixel luminance (0..1)
 let imgW = 0, imgH = 0;
-let tool = "brush";
+let tool = "wand";
 let brushSize = 48;
+let tolerance = 26;
 let drawing = false;
 let selectedColour = null;
+
+// Alpha value the mask uses for a brush stamp / flood fill. 108/255 ≈ 0.42,
+// matching the brush fillStyle so the two tools look identical in the overlay.
+const MASK_ALPHA = 108;
 
 const state = { q: "", family: null };
 
@@ -353,16 +363,68 @@ function strokeTo(e) {
 }
 cvMask.addEventListener("pointerdown", e => {
   if (!srcData) return;
+  if (tool === "wand") {
+    const p = pointerPos(e);
+    floodFill(Math.round(p.x), Math.round(p.y));
+    if (selectedColour) recolour();
+    return;
+  }
   cvMask.setPointerCapture(e.pointerId);
   drawing = true;
   strokeTo(e);
 });
 cvMask.addEventListener("pointermove", strokeTo);
-cvMask.addEventListener("pointerup", e => {
+cvMask.addEventListener("pointerup", () => {
   drawing = false;
   if (selectedColour) recolour(); // final full pass
 });
 cvMask.addEventListener("pointercancel", () => { drawing = false; });
+
+/* ---------- flood fill (magic wand) ----------
+   4-way flood from the tapped pixel over srcData, matching colours within
+   `tolerance` (Euclidean distance in sRGB; good enough for a wall painted a
+   roughly uniform colour under uneven light). Writes to the mask canvas's
+   alpha channel so it combines additively with brush strokes - the user can
+   wand the wall, then brush-correct the spillover. */
+function floodFill(x0, y0) {
+  if (x0 < 0 || y0 < 0 || x0 >= imgW || y0 >= imgH) return;
+  const tol2 = tolerance * tolerance * 3; // squared, pre-multiplied by 3 channels
+  const n = imgW * imgH;
+  const visited = new Uint8Array(n);
+  const stack = new Int32Array(Math.min(n, 1 << 20));
+  let top = 0;
+
+  const start = (y0 * imgW + x0) * 4;
+  const tr = srcData[start], tg = srcData[start + 1], tb = srcData[start + 2];
+
+  const maskImage = ctxMask.getImageData(0, 0, imgW, imgH);
+  const m = maskImage.data;
+
+  stack[top++] = y0 * imgW + x0;
+  visited[y0 * imgW + x0] = 1;
+
+  while (top > 0) {
+    const idx = stack[--top];
+    const i = idx * 4;
+    const dr = srcData[i] - tr, dg = srcData[i + 1] - tg, db = srcData[i + 2] - tb;
+    if (dr * dr + dg * dg + db * db > tol2) continue;
+
+    // Paint this pixel into the mask (preserve existing, never dim it).
+    m[i] = 235; m[i + 1] = 152; m[i + 2] = 34;
+    if (m[i + 3] < MASK_ALPHA) m[i + 3] = MASK_ALPHA;
+
+    const x = idx % imgW, y = (idx - x) / imgW;
+    if (x > 0 && !visited[idx - 1])      { visited[idx - 1] = 1; stack[top++] = idx - 1; }
+    if (x < imgW - 1 && !visited[idx + 1]) { visited[idx + 1] = 1; stack[top++] = idx + 1; }
+    if (y > 0 && !visited[idx - imgW])     { visited[idx - imgW] = 1; stack[top++] = idx - imgW; }
+    if (y < imgH - 1 && !visited[idx + imgW]) { visited[idx + imgW] = 1; stack[top++] = idx + imgW; }
+
+    // Guard against pathological growth on huge images.
+    if (top >= stack.length - 4) break;
+  }
+
+  ctxMask.putImageData(maskImage, 0, 0);
+}
 
 /* ---------- recolour (luminance-preserving) ----------
    For masked pixels: keep the source pixel's relative luminance, replace its
@@ -430,9 +492,15 @@ function recolour() {
 /* ---------- toolbar ---------- */
 function setTool(t) {
   tool = t;
+  document.getElementById("t-wand").setAttribute("aria-pressed", t === "wand");
   document.getElementById("t-brush").setAttribute("aria-pressed", t === "brush");
   document.getElementById("t-eraser").setAttribute("aria-pressed", t === "eraser");
+  // Show the size slider for brush/eraser, tolerance slider for wand.
+  document.getElementById("size-ctrl").hidden = t === "wand";
+  document.getElementById("tol-ctrl").hidden = t !== "wand";
+  cvMask.style.cursor = t === "wand" ? "crosshair" : "cell";
 }
+document.getElementById("t-wand").addEventListener("click", () => setTool("wand"));
 document.getElementById("t-brush").addEventListener("click", () => setTool("brush"));
 document.getElementById("t-eraser").addEventListener("click", () => setTool("eraser"));
 document.getElementById("t-clear").addEventListener("click", () => {
@@ -442,6 +510,10 @@ document.getElementById("t-clear").addEventListener("click", () => {
 document.getElementById("brush-size").addEventListener("input", e => {
   brushSize = +e.target.value;
   document.getElementById("brush-size-val").textContent = brushSize;
+});
+document.getElementById("tolerance").addEventListener("input", e => {
+  tolerance = +e.target.value;
+  document.getElementById("tolerance-val").textContent = tolerance;
 });
 document.getElementById("t-download").addEventListener("click", () => {
   if (!srcData) return;

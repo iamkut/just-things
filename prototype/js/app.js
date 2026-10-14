@@ -199,6 +199,7 @@
     ["products.html?category=Primers+%26+undercoats", "Primers"],
     ["products.html?category=Waterproofing", "Waterproofing"],
     ["colours.html", "Colours"],
+    ["visualiser.html", "Visualiser"],
   ];
 
   const ROLLER_TILE = `

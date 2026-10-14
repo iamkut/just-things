@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en-ZA" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visualiser - Just Paints</title>
+<meta name="description" content="See a Stevensons Real Colour on your own wall. Upload a photo, brush over the paintable surface, pick a colour.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  /* visualiser-only layout - kept inline so the page stays self-contained */
+  .vis-layout { display: grid; grid-template-columns: 1fr 320px; gap: var(--jt-space-6); align-items: start; }
+  @media (max-width: 980px) { .vis-layout { grid-template-columns: 1fr; } }
+
+  .vis-stage {
+    position: relative;
+    background: #0e1016;
+    border-radius: var(--jt-radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    display: grid;
+    place-items: center;
+  }
+  .vis-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+  .vis-stage .vis-prompt {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    color: #c7cbdb; text-align: center; padding: var(--jt-space-6);
+  }
+  .vis-stage .vis-prompt .btn { margin-top: var(--jt-space-3); }
+
+  .vis-toolbar {
+    display: flex; flex-wrap: wrap; gap: var(--jt-space-2);
+    margin-top: var(--jt-space-3); align-items: center;
+  }
+  .vis-tool {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px;
+    background: #fff; border: 1px solid var(--jt-border); border-radius: 999px;
+    font-weight: 600; font-size: 13px; cursor: pointer; color: var(--jt-ink);
+  }
+  .vis-tool[aria-pressed="true"] { background: var(--jt-blue-600); border-color: var(--jt-blue-600); color: #fff; }
+  .vis-tool.ghost { background: transparent; }
+
+  .vis-brushsize { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--jt-ink-dim); }
+  .vis-brushsize input { width: 110px; }
+
+  .vis-sidebar .card { position: sticky; top: var(--jt-space-4); }
+  .vis-colour-list {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+    max-height: 360px; overflow-y: auto;
+    padding-right: 4px;
+  }
+  .vis-swatch {
+    aspect-ratio: 1; border-radius: 8px; border: 2px solid transparent;
+    cursor: pointer; padding: 0; position: relative;
+  }
+  .vis-swatch[aria-pressed="true"] { border-color: var(--jt-ink); box-shadow: 0 0 0 2px #fff inset; }
+  .vis-swatch .vs-code {
+    position: absolute; left: 0; right: 0; bottom: 2px;
+    font-size: 9px; text-align: center; color: inherit; opacity: 0.75;
+  }
+
+  .vis-family-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: var(--jt-space-2); }
+  .vis-family-chips .chip { padding: 3px 8px; font-size: 11px; }
+
+  .vis-selected {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px; border-radius: 8px; background: var(--jt-surface-2);
+    margin-bottom: var(--jt-space-3);
+  }
+  .vis-selected .vs-dot { width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgb(0 0 0 / .15); }
+
+  .vis-caveat {
+    font-size: 11px; color: var(--jt-ink-dim);
+    margin-top: var(--jt-space-3); line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+<div id="jt-header"></div>
+
+<main class="wrap">
+  <div class="section-head" style="margin-top:var(--jt-space-8)">
+    <div>
+      <h1>See it on your wall</h1>
+      <p>Upload a photo of your room, brush over the wall, and try a colour. The
+         preview preserves the wall's own shadows and light - a solid tint
+         would look fake.</p>
+    </div>
+  </div>
+
+  <div class="vis-layout">
+    <section>
+      <div class="vis-stage" id="stage">
+        <canvas id="cv-image" aria-label="Room photo"></canvas>
+        <canvas id="cv-mask" aria-label="Painted surface overlay"></canvas>
+        <div class="vis-prompt" id="prompt">
+          <div>
+            <p><strong>Upload a photo of a wall</strong></p>
+            <p class="small">JPEG or PNG. Nothing is uploaded anywhere - the whole thing runs in your browser.</p>
+            <label class="btn btn-primary" for="file-input">Choose a photo</label>
+            <button class="btn btn-ghost" type="button" id="use-sample">Try a sample room</button>
+            <input type="file" id="file-input" accept="image/*" hidden>
+          </div>
+        </div>
+      </div>
+
+      <div class="vis-toolbar" id="toolbar" hidden>
+        <button class="vis-tool" type="button" id="t-brush" aria-pressed="true">Brush</button>
+        <button class="vis-tool" type="button" id="t-eraser" aria-pressed="false">Eraser</button>
+        <label class="vis-brushsize">
+          Size <input type="range" id="brush-size" min="8" max="140" value="48">
+          <span id="brush-size-val">48</span>
+        </label>
+        <span style="flex:1"></span>
+        <button class="vis-tool ghost" type="button" id="t-clear">Clear mask</button>
+        <label class="vis-tool ghost" for="file-input">Change photo</label>
+        <button class="vis-tool ghost" type="button" id="t-download" disabled>Download</button>
+      </div>
+
+      <p class="vis-caveat" id="caveat" hidden>
+        Brush over the wall surface. The preview preserves the wall's own
+        shadows and light - but screen colours are a guide. Order a sample pot
+        before you commit.
+      </p>
+    </section>
+
+    <aside class="vis-sidebar">
+      <div class="card">
+        <h3 style="margin:0 0 var(--jt-space-3)">Choose a colour</h3>
+
+        <div class="vis-selected" id="selected" hidden>
+          <span class="vs-dot" id="sel-dot"></span>
+          <div style="flex:1;min-width:0">
+            <strong class="small" id="sel-name"></strong>
+            <div class="xs muted" id="sel-meta"></div>
+          </div>
+        </div>
+
+        <input class="search-input" type="search" id="q" placeholder="Name or RC code" aria-label="Search colours" style="width:100%;margin-bottom:var(--jt-space-2)">
+
+        <div class="vis-family-chips" id="families"></div>
+
+        <div class="vis-colour-list" id="swatches"></div>
+
+        <a class="btn btn-primary btn-block" id="shop-link" href="#" style="margin-top:var(--jt-space-3);display:none">
+          Shop this colour
+        </a>
+
+        <p class="vis-caveat">
+          The visualiser is a decision aid. Order a sample pot before committing -
+          lighting, wall texture and screen gamut all affect how a colour reads.
+        </p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<div id="jt-footer"></div>
+
+<script src="data/colours.js"></script>
+<script src="data/catalogue.js"></script>
+<script src="js/app.js"></script>
+<script>
+JT.mount("Visualiser");
+
+/* ---------- state ---------- */
+const stage = document.getElementById("stage");
+const cvImage = document.getElementById("cv-image");
+const cvMask = document.getElementById("cv-mask");
+const ctxImg = cvImage.getContext("2d", { willReadFrequently: true });
+const ctxMask = cvMask.getContext("2d");
+let srcCanvas = null;              // original pixels, never redrawn by brush
+let srcData = null;                // Uint8ClampedArray cache of srcCanvas
+let srcLuma = null;                // Float32Array of per-pixel luminance (0..1)
+let imgW = 0, imgH = 0;
+let tool = "brush";
+let brushSize = 48;
+let drawing = false;
+let selectedColour = null;
+
+const state = { q: "", family: null };
+
+/* ---------- colour picker ---------- */
+const ALL = JT.colours();
+const FAMILY_DOT = {
+  Neutral: "#8b8f96", Red: "#c0392b", Orange: "#e07b1e", Yellow: "#e6c229",
+  Green: "#3f8f4f", Teal: "#2f8f8f", Blue: "#3986c7", Purple: "#7a5ea8", Pink: "#d4699a"
+};
+const families = [...new Set(ALL.map(c => c.family))]
+  .sort((a, b) => ALL.filter(c => c.family === b).length - ALL.filter(c => c.family === a).length);
+
+function renderFamilies() {
+  document.getElementById("families").innerHTML = families.map(f => `
+    <button class="chip" type="button" data-family="${f}" aria-pressed="${state.family === f}">
+      <span class="dot" style="background:${FAMILY_DOT[f] || "#999"}"></span>${f}
+    </button>`).join("");
+  document.querySelectorAll("[data-family]").forEach(el =>
+    el.addEventListener("click", () => {
+      state.family = state.family === el.dataset.family ? null : el.dataset.family;
+      renderFamilies(); renderSwatches();
+    }));
+}
+
+function renderSwatches() {
+  const q = state.q.trim().toLowerCase();
+  const list = ALL.filter(c => {
+    if (state.family && c.family !== state.family) return false;
+    if (q && !(c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q))) return false;
+    return true;
+  });
+  document.getElementById("swatches").innerHTML = list.map(c => `
+    <button class="vis-swatch" type="button"
+            data-code="${c.code}"
+            aria-pressed="${selectedColour && selectedColour.code === c.code}"
+            title="${c.name} ${c.code}"
+            style="background:${c.hex};color:${JT.contrastOn(c.hex)}">
+      <span class="vs-code">${c.code}</span>
+    </button>`).join("");
+  document.querySelectorAll("[data-code]").forEach(el =>
+    el.addEventListener("click", () => selectColour(JT.colourByCode(el.dataset.code))));
+}
+
+function selectColour(c) {
+  selectedColour = c;
+  const sel = document.getElementById("selected");
+  sel.hidden = false;
+  document.getElementById("sel-dot").style.background = c.hex;
+  document.getElementById("sel-name").textContent = c.name;
+  document.getElementById("sel-meta").textContent =
+    `${c.code} · ${c.hex.toUpperCase()} · LRV ${c.lrv} · ${c.tintBase} base`;
+  const shop = document.getElementById("shop-link");
+  shop.href = `products.html?colour=${c.code}`;
+  shop.style.display = "";
+  document.querySelectorAll("[data-code]").forEach(el =>
+    el.setAttribute("aria-pressed", el.dataset.code === c.code));
+  recolour();
+}
+
+document.getElementById("q").addEventListener("input", e => {
+  state.q = e.target.value; renderSwatches();
+});
+
+/* ---------- image load ---------- */
+function sizeStageToImage(w, h) {
+  // Fit the canvases to the image's aspect ratio while bounded by stage width.
+  stage.style.aspectRatio = `${w} / ${h}`;
+  [cvImage, cvMask].forEach(c => { c.width = w; c.height = h; });
+}
+
+function loadImage(src) {
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.onload = () => {
+    // Downscale large uploads to keep the per-pixel recolour snappy.
+    const MAX = 1600;
+    const scale = Math.min(1, MAX / Math.max(img.naturalWidth, img.naturalHeight));
+    imgW = Math.round(img.naturalWidth * scale);
+    imgH = Math.round(img.naturalHeight * scale);
+    sizeStageToImage(imgW, imgH);
+
+    ctxImg.clearRect(0, 0, imgW, imgH);
+    ctxImg.drawImage(img, 0, 0, imgW, imgH);
+    ctxMask.clearRect(0, 0, imgW, imgH);
+
+    // Cache source pixels + precompute luminance for fast recolour.
+    srcCanvas = document.createElement("canvas");
+    srcCanvas.width = imgW; srcCanvas.height = imgH;
+    srcCanvas.getContext("2d").drawImage(cvImage, 0, 0);
+    srcData = srcCanvas.getContext("2d").getImageData(0, 0, imgW, imgH).data;
+
+    srcLuma = new Float32Array(imgW * imgH);
+    for (let i = 0, p = 0; i < srcData.length; i += 4, p++) {
+      srcLuma[p] = relLum(srcData[i], srcData[i + 1], srcData[i + 2]);
+    }
+
+    document.getElementById("prompt").hidden = true;
+    document.getElementById("toolbar").hidden = false;
+    document.getElementById("caveat").hidden = false;
+    document.getElementById("t-download").disabled = false;
+  };
+  img.onerror = () => alert("Couldn't load that image. Try a JPEG or PNG.");
+  img.src = src;
+}
+
+document.getElementById("file-input").addEventListener("change", e => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => loadImage(r.result);
+  r.readAsDataURL(f);
+});
+
+document.getElementById("use-sample").addEventListener("click", () => {
+  // Procedural sample room: wall + floor + door + light gradient. Lets anyone
+  // try the visualiser without hunting for a photo. Using a canvas-drawn scene
+  // keeps the prototype self-contained (no network, no asset to ship).
+  const w = 1200, h = 900;
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  const g = c.getContext("2d");
+  // wall
+  g.fillStyle = "#e4ddd0"; g.fillRect(0, 0, w, h * 0.72);
+  // soft light from upper-left
+  const grad = g.createRadialGradient(w * 0.25, h * 0.1, 20, w * 0.25, h * 0.1, w * 0.9);
+  grad.addColorStop(0, "rgba(255,245,220,0.55)");
+  grad.addColorStop(1, "rgba(0,0,0,0.18)");
+  g.fillStyle = grad; g.fillRect(0, 0, w, h * 0.72);
+  // skirting + floor
+  g.fillStyle = "#2a2320"; g.fillRect(0, h * 0.72, w, 12);
+  g.fillStyle = "#8a6b4a"; g.fillRect(0, h * 0.72 + 12, w, h);
+  // door
+  g.fillStyle = "#3c2a1f"; g.fillRect(w * 0.62, h * 0.18, w * 0.22, h * 0.54);
+  g.fillStyle = "#d4a84b"; g.fillRect(w * 0.80, h * 0.45, 10, 10);
+  // picture frame
+  g.strokeStyle = "#2a2320"; g.lineWidth = 6;
+  g.strokeRect(w * 0.18, h * 0.22, w * 0.18, h * 0.22);
+  g.fillStyle = "#8aa6c0"; g.fillRect(w * 0.185, h * 0.225, w * 0.17, h * 0.21);
+  loadImage(c.toDataURL("image/png"));
+});
+
+/* ---------- brushing ---------- */
+function pointerPos(e) {
+  const r = cvMask.getBoundingClientRect();
+  const x = (e.clientX - r.left) * (imgW / r.width);
+  const y = (e.clientY - r.top) * (imgH / r.height);
+  return { x, y };
+}
+function paintAt(x, y) {
+  const r = brushSize * (imgW / cvMask.getBoundingClientRect().width);
+  if (tool === "eraser") {
+    ctxMask.save();
+    ctxMask.globalCompositeOperation = "destination-out";
+    ctxMask.beginPath(); ctxMask.arc(x, y, r, 0, Math.PI * 2); ctxMask.fill();
+    ctxMask.restore();
+  } else {
+    // Semi-transparent orange shows the user what's selected; alpha channel
+    // is what the recolour pass actually reads as the mask.
+    ctxMask.fillStyle = "rgba(235, 152, 34, 0.42)";
+    ctxMask.beginPath(); ctxMask.arc(x, y, r, 0, Math.PI * 2); ctxMask.fill();
+  }
+}
+function strokeTo(e) {
+  if (!drawing || !srcData) return;
+  const p = pointerPos(e);
+  paintAt(p.x, p.y);
+  if (selectedColour) scheduleRecolour();
+}
+cvMask.addEventListener("pointerdown", e => {
+  if (!srcData) return;
+  cvMask.setPointerCapture(e.pointerId);
+  drawing = true;
+  strokeTo(e);
+});
+cvMask.addEventListener("pointermove", strokeTo);
+cvMask.addEventListener("pointerup", e => {
+  drawing = false;
+  if (selectedColour) recolour(); // final full pass
+});
+cvMask.addEventListener("pointercancel", () => { drawing = false; });
+
+/* ---------- recolour (luminance-preserving) ----------
+   For masked pixels: keep the source pixel's relative luminance, replace its
+   chromaticity with the target colour's. Scales by (Y_src / Y_target) so dark
+   shadows stay dark, highlights stay bright. Falls back cleanly on textured
+   walls; a flat multiply would wash them out. */
+let recolourScheduled = false;
+function scheduleRecolour() {
+  if (recolourScheduled) return;
+  recolourScheduled = true;
+  requestAnimationFrame(() => { recolourScheduled = false; recolour(); });
+}
+
+function sRgbToLinear(c) {
+  c /= 255;
+  return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+}
+function linearToSrgb(c) {
+  const v = c <= 0.0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
+  return Math.min(255, Math.max(0, Math.round(v * 255)));
+}
+function relLum(r, g, b) {
+  return 0.2126 * sRgbToLinear(r) + 0.7152 * sRgbToLinear(g) + 0.0722 * sRgbToLinear(b);
+}
+function hexToLinear(hex) {
+  const r = sRgbToLinear(parseInt(hex.substr(1, 2), 16));
+  const g = sRgbToLinear(parseInt(hex.substr(3, 2), 16));
+  const b = sRgbToLinear(parseInt(hex.substr(5, 2), 16));
+  const y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return { r, g, b, y };
+}
+
+function recolour() {
+  if (!srcData || !selectedColour) return;
+  const maskData = ctxMask.getImageData(0, 0, imgW, imgH).data;
+  const out = ctxImg.createImageData(imgW, imgH);
+  const o = out.data, s = srcData, m = maskData;
+  const tgt = hexToLinear(selectedColour.hex);
+  const EPS = 0.001;
+
+  for (let i = 0, p = 0; i < s.length; i += 4, p++) {
+    const a = m[i + 3] / 255;        // mask strength
+    if (a < 0.02) {
+      o[i] = s[i]; o[i + 1] = s[i + 1]; o[i + 2] = s[i + 2]; o[i + 3] = 255;
+      continue;
+    }
+    // Scale target chromaticity by the source pixel's own luminance ratio.
+    const ySrc = srcLuma[p];
+    const k = ySrc / Math.max(EPS, tgt.y);
+    const rl = Math.min(1, tgt.r * k);
+    const gl = Math.min(1, tgt.g * k);
+    const bl = Math.min(1, tgt.b * k);
+    const rPainted = linearToSrgb(rl);
+    const gPainted = linearToSrgb(gl);
+    const bPainted = linearToSrgb(bl);
+    // Blend with source by mask strength so brush edges feather smoothly.
+    o[i]     = Math.round(rPainted * a + s[i]     * (1 - a));
+    o[i + 1] = Math.round(gPainted * a + s[i + 1] * (1 - a));
+    o[i + 2] = Math.round(bPainted * a + s[i + 2] * (1 - a));
+    o[i + 3] = 255;
+  }
+  ctxImg.putImageData(out, 0, 0);
+}
+
+/* ---------- toolbar ---------- */
+function setTool(t) {
+  tool = t;
+  document.getElementById("t-brush").setAttribute("aria-pressed", t === "brush");
+  document.getElementById("t-eraser").setAttribute("aria-pressed", t === "eraser");
+}
+document.getElementById("t-brush").addEventListener("click", () => setTool("brush"));
+document.getElementById("t-eraser").addEventListener("click", () => setTool("eraser"));
+document.getElementById("t-clear").addEventListener("click", () => {
+  ctxMask.clearRect(0, 0, imgW, imgH);
+  if (srcData) ctxImg.putImageData(new ImageData(new Uint8ClampedArray(srcData), imgW, imgH), 0, 0);
+});
+document.getElementById("brush-size").addEventListener("input", e => {
+  brushSize = +e.target.value;
+  document.getElementById("brush-size-val").textContent = brushSize;
+});
+document.getElementById("t-download").addEventListener("click", () => {
+  if (!srcData) return;
+  const link = document.createElement("a");
+  link.download = `just-paints-${selectedColour ? selectedColour.code : "preview"}.png`;
+  link.href = cvImage.toDataURL("image/png");
+  link.click();
+});
+
+renderFamilies();
+renderSwatches();
+</script>
+</body>
+</html>

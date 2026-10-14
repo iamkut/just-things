@@ -108,27 +108,37 @@ JT.mount("Home");
     picks.map(c => `<div style="background:${c.hex}" title="${c.name} ${c.code}"></div>`).join("");
 })();
 
-// Categories, each illustrated with a tin in a representative colour.
+// Categories, each illustrated with the hero product from that category
+// (whichever has the most colour options and a real image).
 (function () {
-  const swatch = { "Interior walls": "RC75", "Exterior walls": "RC85", "Roof": "RC140",
-                   "Wood care": "RC19", "Enamel & metal": "RC102" };
+  const all = JT.products();
+  const pick = cat => all
+    .filter(p => p.category === cat && p.image)
+    .sort((a, b) => (b.colourCount || 0) - (a.colourCount || 0))[0];
+
   document.getElementById("categories").innerHTML = JT.categories().map(cat => {
-    const count = JT.products().filter(p => p.category === cat).length;
-    const c = JT.colourByCode(swatch[cat]);
+    const products = all.filter(p => p.category === cat);
+    const hero = pick(cat);
+    const art = hero
+      ? `<img class="category-photo" src="${hero.image}" alt="${hero.name}" loading="lazy">`
+      : JT.tinSvg(null, { label: cat.split(" ")[0].toLowerCase() });
     return `
-    <a class="card" href="products.html?category=${encodeURIComponent(cat)}" style="text-align:center">
-      <div style="display:grid;place-items:center;margin-bottom:var(--jt-space-2)">
-        ${JT.tinSvg(c ? c.hex : null, { label: cat.split(" ")[0].toLowerCase() })}
-      </div>
+    <a class="card category-card" href="products.html?category=${encodeURIComponent(cat)}">
+      <div class="category-art">${art}</div>
       <h3 style="margin-bottom:2px">${cat}</h3>
-      <p class="meta" style="margin:0">${count} product${count === 1 ? "" : "s"}</p>
+      <p class="meta" style="margin:0">${products.length} product${products.length === 1 ? "" : "s"}</p>
     </a>`;
   }).join("");
 })();
 
-// Featured products - real product cards.
+// Featured products - one tintable headline per top-of-funnel category.
 (function () {
-  const featured = [...JT.products()].sort((a, b) => b.reviews - a.reviews).slice(0, 4);
+  const wanted = ["Interior walls", "Exterior walls", "Roof", "Enamel & metal"];
+  const all = JT.products();
+  const featured = wanted.map(cat =>
+    [...all].filter(p => p.category === cat && (p.colourCount || 0) > 1)
+            .sort((a, b) => (b.colourCount || 0) - (a.colourCount || 0))[0]
+  ).filter(Boolean);
   document.getElementById("featured").innerHTML =
     featured.map(p => JT.productCard(p, null)).join("");
 })();

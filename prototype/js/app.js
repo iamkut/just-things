@@ -131,14 +131,20 @@
   }
 
   /* ---------- product card ------------------------------------------------ */
+  /* When a colour is selected we fall back to the SVG tin so the lid picks up
+     that colour - the real tin photo is always factory white. */
   function productCard(product, colour) {
     const from = fromPrice(product, colour);
     const sizes = product.packs.map(p => `${p.litres}L`).join(" · ");
     const href = `product.html?p=${product.id}${colour ? `&colour=${colour.code}` : ""}`;
+    const art = (!colour && product.image)
+      ? `<img class="product-photo" src="${product.image}" alt="${product.name}" loading="lazy">`
+      : tinSvg(colour ? colour.hex : null, { label: product.range, sub: product.sheens[0] || "" });
+    const finish = product.sheens[0] ? `${product.sheens[0]} finish` : null;
     return `
 <a class="product-card" href="${href}">
   <div class="product-art">
-    ${tinSvg(colour ? colour.hex : null, { label: product.range, sub: product.sheens[0] })}
+    ${art}
     ${product.hazard ? `<span class="badge badge-warn art-flag">${product.hazard}</span>` : ""}
   </div>
   <div class="product-body">
@@ -146,7 +152,7 @@
     <h3>${product.name}</h3>
     <p class="product-blurb">${product.blurb}</p>
     <div class="product-meta">
-      <span>&#9733; ${product.rating} <span class="muted">(${product.reviews})</span></span>
+      ${finish ? `<span>${finish}</span>` : "<span></span>"}
       <span class="muted">${product.coveragePerLitre} m&sup2;/L</span>
     </div>
     <div class="product-sizes muted">${sizes}</div>
@@ -190,6 +196,8 @@
     ["products.html?category=Roof", "Roof"],
     ["products.html?category=Wood+care", "Wood care"],
     ["products.html?category=Enamel+%26+metal", "Enamel & metal"],
+    ["products.html?category=Primers+%26+undercoats", "Primers"],
+    ["products.html?category=Waterproofing", "Waterproofing"],
     ["colours.html", "Colours"],
   ];
 
@@ -206,8 +214,8 @@
   function header(active) {
     return `
 <div class="proto-note">
-  Prototype &middot; colour names, codes and hex are Stevensons&rsquo; published Real Colours.
-  <strong>Prices, stock and delivery are illustrative.</strong>
+  Prototype &middot; products, images and colours are Stevensons&rsquo; own, used with permission.
+  <strong>Retail prices, stock and delivery are illustrative.</strong>
 </div>
 <div class="utility"><div class="wrap">
   <a class="parent-link" href="#" title="Just Things marketplace">

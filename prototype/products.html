@@ -63,7 +63,7 @@
         <label class="small muted">
           Sort
           <select id="sort" class="inline-select">
-            <option value="popular">Most popular</option>
+            <option value="popular">Featured</option>
             <option value="price-asc">Price, low to high</option>
             <option value="price-desc">Price, high to low</option>
             <option value="name">Name</option>
@@ -130,7 +130,7 @@ if (fromUrl && ALL.some(p => p.category === fromUrl)) {
   }
 }
 
-const allSheens = [...new Set(ALL.flatMap(p => p.sheens))];
+const allSheens = [...new Set(ALL.flatMap(p => p.sheens))].filter(Boolean);
 const allPacks = [...new Set(ALL.flatMap(p => p.packs.map(k => k.litres)))].sort((a, b) => a - b);
 
 function chip(kind, value, label, count) {
@@ -171,7 +171,11 @@ function sorted(list) {
     case "price-asc": return [...list].sort((a, b) => price(a) - price(b));
     case "price-desc": return [...list].sort((a, b) => price(b) - price(a));
     case "name": return [...list].sort((a, b) => a.name.localeCompare(b.name));
-    default: return [...list].sort((a, b) => b.reviews - a.reviews);
+    // "Popular" without ratings: colour-rich products first, as they're the
+    // headline tintable ranges. Falls through to name as a stable tiebreak.
+    default: return [...list].sort((a, b) =>
+      (b.colourCount || 0) - (a.colourCount || 0) ||
+      a.name.localeCompare(b.name));
   }
 }
 

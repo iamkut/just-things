@@ -8,6 +8,8 @@ out/
 
 # Dependencies
 node_modules/
+__pycache__/
+*.pyc
 
 # Environment & secrets
 .env

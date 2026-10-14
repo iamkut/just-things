@@ -72,7 +72,7 @@
         <p class="muted" id="blurb"></p>
         <div class="row">
           <span class="badge badge-ok" id="stock">In stock</span>
-          <span class="small muted" id="rating"></span>
+          <span class="badge" id="finish-badge" hidden></span>
         </div>
       </div>
 
@@ -86,11 +86,6 @@
           </span>
           <span class="btn btn-ghost" style="pointer-events:none">Change</span>
         </button>
-      </div>
-
-      <div>
-        <span class="field-label">Finish</span>
-        <div class="opts" id="sheens"></div>
       </div>
 
       <div>
@@ -114,6 +109,22 @@
         <div class="row" style="margin-top:var(--jt-space-5);gap:var(--jt-space-3)">
           <button class="btn btn-primary btn-lg" style="flex:1" type="button" id="add">Add to basket</button>
           <button class="btn btn-ghost btn-lg" type="button" id="add-sample">Add sample pot</button>
+        </div>
+      </div>
+
+      <div class="card" id="features-card" hidden>
+        <h3>Features &amp; benefits</h3>
+        <ul id="features-list" class="small" style="margin:0;padding-left:1.1rem"></ul>
+      </div>
+
+      <div class="card" id="docs-card" hidden>
+        <h3>Technical sheets</h3>
+        <p class="small muted" style="margin:0 0 var(--jt-space-3)">
+          Published by Stevensons - PDFs open in Google Drive.
+        </p>
+        <div class="row" style="gap:var(--jt-space-3)">
+          <a class="btn btn-ghost" id="tds-link" href="#" target="_blank" rel="noopener">Data sheet (TDS)</a>
+          <a class="btn btn-ghost" id="sds-link" href="#" target="_blank" rel="noopener">Safety sheet (SDS)</a>
         </div>
       </div>
 
@@ -155,7 +166,7 @@ JT.mount("All paint");
 const product = JT.productById(JT.param("p")) || JT.products()[0];
 const state = {
   colour: JT.colourByCode(JT.param("colour")) || null,
-  sheen: product.sheens[0],
+  sheen: product.sheens[0] || "Matt",   // some products carry no finish spec
   pack: product.packs[Math.min(1, product.packs.length - 1)]
 };
 
@@ -165,45 +176,62 @@ document.getElementById("title").textContent = product.name;
 document.getElementById("blurb").textContent = product.blurb;
 document.getElementById("brandline").textContent =
   `${product.brand} · ${product.range} range · ${product.coveragePerLitre} m² per litre`;
-document.getElementById("rating").innerHTML =
-  `&#9733; ${product.rating} <span class="muted">(${product.reviews} reviews)</span>`;
+
+if (product.sheens[0]) {
+  const fb = document.getElementById("finish-badge");
+  fb.textContent = `${product.sheens[0]} finish`;
+  fb.hidden = false;
+}
 if (product.hazard) {
   document.getElementById("stock").insertAdjacentHTML("afterend",
     `<span class="badge badge-warn">${product.hazard} - courier restrictions apply</span>`);
 }
 
+if (product.features && product.features.length) {
+  document.getElementById("features-card").hidden = false;
+  document.getElementById("features-list").innerHTML =
+    product.features.map(f => `<li>${f}</li>`).join("");
+}
+if (product.tdsUrl || product.sdsUrl) {
+  document.getElementById("docs-card").hidden = false;
+  const tds = document.getElementById("tds-link");
+  const sds = document.getElementById("sds-link");
+  if (product.tdsUrl) tds.href = product.tdsUrl; else tds.hidden = true;
+  if (product.sdsUrl) sds.href = product.sdsUrl; else sds.hidden = true;
+}
+
 /* ---------- options ---------- */
 function renderOptions() {
-  document.getElementById("sheens").innerHTML = product.sheens.map(s => {
-    const up = window.JT_SHEEN_UPLIFT[s] || 0;
-    return `<button class="opt" type="button" data-sheen="${s}" aria-pressed="${s === state.sheen}">
-      ${s}<small>${up ? "+" + Math.round(up * 100) + "%" : "standard"}</small></button>`;
-  }).join("");
-
   document.getElementById("packs").innerHTML = product.packs.map(p => {
     const price = JT.resolvePrice(product, p, state.sheen, state.colour);
     return `<button class="opt" type="button" data-litres="${p.litres}" aria-pressed="${p.litres === state.pack.litres}">
       ${p.litres}L<small>${JT.zar(price.incVat)}</small></button>`;
   }).join("");
 
-  document.querySelectorAll("[data-sheen]").forEach(el => el.addEventListener("click", () => {
-    state.sheen = el.dataset.sheen; renderAll();
-  }));
   document.querySelectorAll("[data-litres]").forEach(el => el.addEventListener("click", () => {
     state.pack = product.packs.find(p => p.litres === +el.dataset.litres); renderAll();
   }));
 }
 
-/* ---------- preview ---------- */
+/* ---------- preview ----------
+   The real product photo is factory white, so we only show it before the
+   customer picks a colour. Once a colour is chosen, we fall back to the SVG
+   tin so the lid and label stripe pick up that colour as a preview. */
 function renderPreview() {
   const c = state.colour;
   const hex = c ? c.hex : "#f2f2f0";
   const preview = document.getElementById("preview");
-  preview.style.background = hex;
-  preview.innerHTML = JT.tinSvg(c ? c.hex : null, {
-    label: product.range.toLowerCase(),
-    sub: `${state.sheen} · ${state.pack.litres}L`,
-  });
+  preview.style.background = c ? hex : "transparent";
+
+  if (!c && product.image) {
+    preview.innerHTML = `<img class="product-photo" src="${product.image}" alt="${product.name}">`;
+  } else {
+    preview.innerHTML = JT.tinSvg(c ? c.hex : null, {
+      label: (product.range || "").toLowerCase(),
+      sub: `${state.sheen} · ${state.pack.litres}L`,
+    });
+  }
+
   document.getElementById("cap-colour").textContent =
     c ? `${c.code} · ${c.hex.toUpperCase()} · ${c.family}` : "No tint - factory white base";
   document.getElementById("cap-lrv").textContent = c ? `LRV ${c.lrv}` : "";

@@ -209,6 +209,21 @@
 .product-art .art-flag { position: absolute; top: 10px; right: 10px; }
 
 .tin-art { width: 100%; max-width: 132px; height: auto; display: block; }
+.product-photo {
+  width: 100%; max-width: 180px; height: auto; display: block;
+  mix-blend-mode: multiply;             /* collapse the tin's own white background */
+}
+
+.category-card { text-align: center; }
+.category-art {
+  display: grid; place-items: center;
+  margin-bottom: var(--jt-space-3);
+  min-height: 150px;
+}
+.category-photo {
+  width: 100%; max-width: 140px; height: auto; display: block;
+  mix-blend-mode: multiply;
+}
 .tin-label {
   font-family: var(--jt-font-display); font-size: 13px; font-weight: 700;
   fill: var(--jt-blue-600); text-transform: lowercase; letter-spacing: -0.02em;

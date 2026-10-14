@@ -42,3 +42,6 @@ npm-debug.log*
 # Scratch
 rc.html
 *.scratch.*
+
+# Local raw extracts (not referenced by prototype; re-extract from client xlsx)
+prototype/data/images/

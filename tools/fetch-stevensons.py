@@ -46,6 +46,13 @@ BASE = "https://stevensons.co.za"
 LISTING = BASE + "/products/?product-page={page}"
 UA = "JustPaints-Catalogue-Fetcher/0.1 (+kutlom@aissa.co.za)"
 
+# Products that are live on stevensons.co.za but absent from the shop listing
+# crawl. Sourced from the client's Oct 2026 catalogue hand-off (Admin xlsx).
+KNOWN_EXTRA_URLS = [
+    BASE + "/product/dura-vinyl-silk-interior-exterior/",
+    BASE + "/product/industrial-qd-enamel-interior-exterior/",
+]
+
 session = requests.Session()
 session.headers["User-Agent"] = UA
 
@@ -134,6 +141,10 @@ def discover_product_urls() -> list[str]:
         page += 1
         if page > 20:  # hard safety
             break
+    for extra in KNOWN_EXTRA_URLS:
+        if extra not in seen:
+            seen.add(extra)
+            urls.append(extra)
     return urls
 
 
@@ -489,19 +500,26 @@ def download_images(products: list[Product]) -> None:
                 print(f"  !! colour image failed for {p.slug}/{v.colour_slug}: {e}", file=sys.stderr)
 
 
-def write_catalogue(products: list[Product]) -> None:
+def write_catalogue(products: list[Product], merge: bool = False) -> None:
+    product_dicts = [
+        {**asdict(p), "variations": [asdict(v) for v in p.variations]}
+        for p in products
+    ]
+    if merge and DATA_FILE.exists():
+        existing = json.loads(DATA_FILE.read_text(encoding="utf-8"))
+        by_url = {p["url"].rstrip("/"): p for p in existing.get("products", [])}
+        for p in product_dicts:
+            by_url[p["url"].rstrip("/")] = p
+        product_dicts = list(by_url.values())
     payload = {
         "source": "stevensons.co.za",
         "fetched_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "note": "Pricing captured for reference; treat as pending-confirmation per CLAUDE.md.",
-        "products": [
-            {**asdict(p), "variations": [asdict(v) for v in p.variations]}
-            for p in products
-        ],
+        "products": product_dicts,
     }
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
     DATA_FILE.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"wrote {DATA_FILE.relative_to(ROOT)} ({len(products)} products)")
+    print(f"wrote {DATA_FILE.relative_to(ROOT)} ({len(product_dicts)} products)")
 
 
 def main() -> int:
@@ -510,6 +528,7 @@ def main() -> int:
     parser.add_argument("--no-images", action="store_true", help="skip image downloads")
     parser.add_argument("--no-brochures", action="store_true", help="skip brochure spec enrichment")
     parser.add_argument("--only", help="comma-separated product slug substrings to include")
+    parser.add_argument("--merge", action="store_true", help="merge scraped products into existing catalogue instead of replacing it")
     args = parser.parse_args()
 
     print("discovering product URLs...")
@@ -556,7 +575,7 @@ def main() -> int:
         print("downloading images...")
         download_images(products)
 
-    write_catalogue(products)
+    write_catalogue(products, merge=args.merge)
     return 0
 
 

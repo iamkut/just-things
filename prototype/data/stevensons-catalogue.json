@@ -1,6 +1,6 @@
 {
   "source": "stevensons.co.za",
-  "fetched_at": "2026-10-14T09:16:45Z",
+  "fetched_at": "2026-10-14T11:26:44Z",
   "note": "Pricing captured for reference; treat as pending-confirmation per CLAUDE.md.",
   "products": [
     {
@@ -10207,6 +10207,87 @@
         "Excellent sanding properties"
       ],
       "long_description": "Stevensons Tradesman Universal Undercoat\nAn alkali resistant solvent based primer.\nSolvent Based Primer"
+    },
+    {
+      "url": "https://stevensons.co.za/product/dura-vinyl-silk-interior-exterior/",
+      "slug": "dura-vinyl-silk-interior-exterior",
+      "sku": "P-STEV-DURA-VINYL-SILK-INTERIOR-EXTERIOR",
+      "name": "DURA VINYL SILK – Interior & exterior",
+      "brand": "Stevensons",
+      "range": "DURA RANGE",
+      "short_description": "Premium quality washable acrylic paint with a fine smooth silky finish.",
+      "sizes": [],
+      "colours": [],
+      "price_range": null,
+      "hero_image_url": "https://stevensons.co.za/wp-content/uploads/2025/08/STEVSAM5.png",
+      "hero_image_local": "assets/stevensons/products/dura-vinyl-silk-interior-exterior.png",
+      "tds_url": "https://drive.google.com/file/d/1oGTuVz21n2d_oFVf8MVbvzaNsQs2z9Ot/view?usp=share_link",
+      "sds_url": "https://drive.google.com/file/d/1x5J7PeeElyRNbJtS80LUka750yraoQtc/view?usp=share_link",
+      "variations": [],
+      "brochure_url": "https://stevensons.co.za/product-info/stevensons-vinyl-silk/",
+      "appearance": "Smooth Silk Finish",
+      "product_type": "Acrylic",
+      "guarantee": "12 Years",
+      "project_type": "Exterior, Interior",
+      "flash_point": "Non-flammable",
+      "theoretical_coverage": "8-10m²/? per coat",
+      "coverage_per_litre": 9.0,
+      "coats_recommended": 2,
+      "tint_bases": [
+        "Pastel",
+        "Deep",
+        "Transparent"
+      ],
+      "features": [
+        "Silk finish",
+        "Stain resistant",
+        "Good coverage",
+        "12-Year quality guarantee",
+        "Quick drying – 2 coats can be applied in one day",
+        "Interior and exterior use",
+        "Apply by brush or roller"
+      ],
+      "long_description": "Stevensons Vinyl Silk\nGood quality washable acrylic paint with a fine smooth silk finish for interior and exterior use.\nSilk Acrylic\nÂ"
+    },
+    {
+      "url": "https://stevensons.co.za/product/industrial-qd-enamel-interior-exterior/",
+      "slug": "industrial-qd-enamel-interior-exterior",
+      "sku": "P-STEV-INDUSTRIAL-QD-ENAMEL-INTERIOR-EXTERIOR",
+      "name": "INDUSTRIAL QD ENAMEL – Interior & exterior",
+      "brand": "Stevensons",
+      "range": "INDUSTRIAL RANGE",
+      "short_description": "High-solids.",
+      "sizes": [],
+      "colours": [],
+      "price_range": null,
+      "hero_image_url": "https://stevensons.co.za/wp-content/uploads/2025/08/INDQDBSG1.png",
+      "hero_image_local": "assets/stevensons/products/industrial-qd-enamel-interior-exterior.png",
+      "tds_url": "https://drive.google.com/file/d/1Wt9wP4m469CwJcC-LeZzCHvG33qpkh5a/view?usp=drive_link",
+      "sds_url": "https://drive.google.com/file/d/1D3O3mTjPhbxsiSEUTSVPy76KJVHS0hTq/view?usp=drive_link",
+      "variations": [],
+      "brochure_url": "https://stevensons.co.za/product-info/stevensons-industrial-qd-enamel/",
+      "appearance": "High Gloss",
+      "product_type": "Enamel",
+      "guarantee": "N/A",
+      "project_type": "Door, Window & Trim, Exterior, Gate, Fence & Palisade, Industrial, Interior, Roof",
+      "flash_point": "Flammable",
+      "theoretical_coverage": "8-12m²/? per coat",
+      "coverage_per_litre": 10.0,
+      "coats_recommended": 2,
+      "tint_bases": [
+        "White and transparent"
+      ],
+      "features": [
+        "Dries to a hardwearing high gloss finish",
+        "Ultra-tough",
+        "Scratch and stain resistant",
+        "High opacity",
+        "Durable",
+        "Lead free",
+        "UV resistant",
+        "Interior and exterior"
+      ],
+      "long_description": "Stevensons Industrial QD Enamel\nPremium quality interior or exterior quick-drying industrial enamel finish for the protection and decoration of steel surfaces.\nIndustrial Enamel"
     }
   ]
 }

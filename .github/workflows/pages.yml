@@ -1,11 +1,8 @@
 name: Deploy prototype to GitHub Pages
 
+# Automatic deploys are off: the Pages site is deliberately unpublished.
+# Run this manually (Actions -> Run workflow) to publish it again.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'prototype/**'
-      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:
